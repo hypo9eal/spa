@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Document</title>
+  <!-- <link rel="stylesheet" href="style.css"> -->
+  <style>
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #777;
+    }
+    #spa {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      bottom: 8px;
+      right: 8px;
+      border-radius: 8px 8px 0 8px;
+      background-color: #fff;
+    }
+    .spa-slider {
+      position: absolute;
+      bottom: 0;
+      right: 2px;
+      width: 300px;
+      height: 16px;
+      cursor: pointer;
+      border-radius: 8px 0 0 0;
+      background-color: #f00;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script>
+    // モジュール/spa/
+    // チャットスライダー機能を提供する
+    //
+
+    var spa = ( function ( $ ) {
+      // モジュールスコープ変数
+      var
+        // 定数を設定
+        configMap = {
+          extended_height: 434,
+          extended_title: 'Click to retract',
+          retracted_height: 16,
+          retracted_title: 'Click to extend',
+          template_html: '<div class="spa-slider"><\/div>'
+        },
+        // その他のすべてのモジュールスコープ変数を宣言
+        $chatSlider,
+        toggleSlider, onClickSlider, initModule;
+
+      // DOMメソッド/toggleSlider/
+      // スライダーの高さを切り替える
+      //
+      toggleSlider = function () {
+        var
+          slider_height = $chatSlider.height();
+
+          // 完全に格納されている場合はスライダーを拡大する
+          if ( slider_height === configMap.retracted_height ) {
+            $chatSlider
+              .animate( {height: configMap.extended_height} )
+              .attr( 'title', configMap.extended_title );
+            return true;
+          }
+          // 完全に拡大されている場合は格納する
+          else if ( slider_height === configMap.extended_height ) {
+            $chatSlider
+              .animate( {height: configMap.retracted_height} )
+              .attr( 'title', configMap.retracted_title );
+            return true;
+          }
+          // スライダーが移行中は何もしない
+          toggleSlider();
+          return false;
+      };
+
+      // イベントハンドラ/onClickSlider
+      // クリックイベントを受け取り、toggleSliderを呼び出す
+      //
+      onClickSlider = function ( event ) {
+        toggleSlider();
+        return false;
+      };
+
+      // パブリックメソッド/initModule/
+      // 初期状態を設定し、機能を提供する
+      //
+      initModule = function ( $container ) {
+        // HTMLをレンダリングする
+        $container.html( configMap.template_html );
+        $chatSlider = $container.find( '.spa-slider' );
+        // スライダーの高さとタイトルを初期化する
+        // ユーザクリックイベントをイベントハンドラにバインドする
+        $chatSlider
+          .attr( 'title', configMap.retracted_title )
+          .on( 'click', onClickSlider );
+        return true;
+      };
+
+      return { initModule: initModule };
+    }( jQuery ));
+
+    // DOMの準備ができたらspaを開始する
+    jQuery(document).ready(
+      function () { spa.initModule (jQuery( '#spa' ));}
+    );
+  </script>
+</head>
+<body>
+  <div id="spa"></div>
+  <script src="http://localhost:35729/livereload.js"></script>
+</body>
+</html>
