@@ -6,10 +6,13 @@
   "dependencies": {},
   "devDependencies": {
     "eslint": "^1.10.3",
-    "eslint-plugin-html": "^1.2.0"
+    "eslint-plugin-html": "^1.2.0",
+    "gulp": "^3.9.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gulp": "gulp",
+    "start": ""
   },
   "author": "",
   "license": "ISC",
