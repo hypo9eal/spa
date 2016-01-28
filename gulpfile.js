@@ -1,12 +1,30 @@
-var gulp = require( 'gulp' );
+var gulp, sass;
 
-gulp.task( 'default', function () {
-  console.log( 'test' );
+gulp = require( 'gulp' );
+sass = require( 'gulp-sass' );
+
+gulp.task( 'sass', function () {
+  return gulp.src([
+    '_resource/**/*.scss'
+  ])
+  .pipe( sass().on( 'error', sass.logError ) )
+  .pipe( gulp.dest( 'htdocs' ));
 });
 
 gulp.task( 'copy', function () {
   return gulp.src([
-    '_resource/**/*'
+    '_resource/**/*',
+    '!_resource/**/*.scss'
   ])
-  .pipe( gulp.dest( 'html' ));
+  .pipe( gulp.dest( 'htdocs' ) );
 });
+
+gulp.task( 'watch', function () {
+  gulp.watch( ['_resource/**/*.scss'], ['sass'] );
+  gulp.watch([
+    '_resource/**/*',
+    '!_resource/**/*.scss'
+  ], ['copy'] );
+});
+
+gulp.task( 'default', ['copy', 'sass', 'watch'] );
