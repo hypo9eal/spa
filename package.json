@@ -1,7 +1,7 @@
 {
   "name": "spa",
   "version": "1.0.0",
-  "description": "",
+  "description": "desc",
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
@@ -12,5 +12,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hypo9eal/spa"
+  }
 }
