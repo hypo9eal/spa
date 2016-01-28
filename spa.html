@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Document</title>
-  <!-- <link rel="stylesheet" href="style.css"> -->
+  <title>spa</title>
+  <link rel="stylesheet" href="css/spa.css">
+  <link rel="stylesheet" href="css/spa.shell.css">
   <style>
     body {
       width: 100%;
@@ -33,6 +34,13 @@
     }
   </style>
   <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="js/jq/jquery.uriAnchor.js"></script>
+  <script src="js/spa.js"></script>
+  <script src="js/spa.shell.js"></script>
+  <script src="http://localhost:35729/livereload.js"></script>
+  <script>
+    $( function () { spa.initModule( $('#spa') );} );
+  </script>
   <script>
     // モジュール/spa/
     // チャットスライダー機能を提供する
@@ -104,15 +112,9 @@
 
       return { initModule: initModule };
     }( jQuery ));
-
-    // DOMの準備ができたらspaを開始する
-    jQuery(document).ready(
-      function () { spa.initModule (jQuery( '#spa' ));}
-    );
   </script>
 </head>
 <body>
   <div id="spa"></div>
-  <script src="http://localhost:35729/livereload.js"></script>
 </body>
 </html>
