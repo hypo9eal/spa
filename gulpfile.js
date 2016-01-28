@@ -1,3 +1,5 @@
+'use strict';
+
 var gulp, sass;
 
 gulp = require( 'gulp' );
@@ -5,25 +7,25 @@ sass = require( 'gulp-sass' );
 
 gulp.task( 'sass', function () {
   return gulp.src([
-    '_resource/**/*.scss'
+    'source/**/*.scss'
   ])
   .pipe( sass().on( 'error', sass.logError ) )
-  .pipe( gulp.dest( 'htdocs' ));
+  .pipe( gulp.dest( 'public' ));
 });
 
 gulp.task( 'copy', function () {
   return gulp.src([
-    '_resource/**/*',
-    '!_resource/**/*.scss'
+    'source/**/*',
+    '!source/**/*.scss'
   ])
-  .pipe( gulp.dest( 'htdocs' ) );
+  .pipe( gulp.dest( 'public' ) );
 });
 
 gulp.task( 'watch', function () {
-  gulp.watch( ['_resource/**/*.scss'], ['sass'] );
+  gulp.watch( ['source/**/*.scss'], ['sass'] );
   gulp.watch([
-    '_resource/**/*',
-    '!_resource/**/*.scss'
+    'source/**/*',
+    '!source/**/*.scss'
   ], ['copy'] );
 });
 
