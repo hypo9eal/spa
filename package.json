@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
+    "browser-sync": "^2.11.1",
     "eslint": "^1.10.3",
     "eslint-plugin-html": "^1.2.0",
     "gulp": "^3.9.0",

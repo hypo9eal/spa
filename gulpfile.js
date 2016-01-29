@@ -1,16 +1,18 @@
 'use strict';
 
-var gulp, sass;
+var gulp, sass, browserSync;
 
 gulp = require( 'gulp' );
 sass = require( 'gulp-sass' );
+browserSync = require( 'browser-sync' ).create();
 
 gulp.task( 'sass', function () {
   return gulp.src([
     'source/**/*.scss'
   ])
   .pipe( sass().on( 'error', sass.logError ) )
-  .pipe( gulp.dest( 'public' ));
+  .pipe( gulp.dest( 'public' ))
+  .pipe( browserSync.stream());
 });
 
 gulp.task( 'copy', function () {
@@ -18,10 +20,16 @@ gulp.task( 'copy', function () {
     'source/**/*',
     '!source/**/*.scss'
   ])
-  .pipe( gulp.dest( 'public' ) );
+  .pipe( gulp.dest( 'public' ) )
+  .pipe( browserSync.stream());
 });
 
 gulp.task( 'watch', function () {
+  browserSync.init({
+    server: {
+      baseDir: 'public'
+    }
+  });
   gulp.watch( ['source/**/*.scss'], ['sass'] );
   gulp.watch([
     'source/**/*',
