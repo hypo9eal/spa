@@ -1,12 +1,15 @@
 'use strict';
 
-var gulp, sass, browserSync, autoprefixer, sourcemaps;
+var
+  gulp, sass, browserSync, autoprefixer, sourcemaps,
+  cssnano;
 
 gulp = require( 'gulp' );
 sass = require( 'gulp-sass' );
 browserSync = require( 'browser-sync' ).create();
 autoprefixer = require( 'gulp-autoprefixer' );
 sourcemaps = require( 'gulp-sourcemaps' );
+cssnano = require( 'gulp-cssnano' );
 
 // task "css"
 gulp.task( 'css', function () {
@@ -16,6 +19,7 @@ gulp.task( 'css', function () {
   .pipe( sourcemaps.init() )
   .pipe( sass().on( 'error', sass.logError ) )
   .pipe( autoprefixer() )
+  .pipe( cssnano() )
   .pipe( sourcemaps.write( 'map' ))
   .pipe( gulp.dest( '../build' ) )
   .pipe( browserSync.stream() );
