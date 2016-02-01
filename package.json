@@ -20,7 +20,7 @@
   },
   "scripts": {
     "test": "",
-    "gulp": "gulp --cwd gulp",
+    "gulp": "gulp",
     "hologram": "hologram -c hologram/config.yml",
     "start": ""
   },
