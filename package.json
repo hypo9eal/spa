@@ -18,6 +18,7 @@
   "scripts": {
     "test": "",
     "gulp": "gulp --cwd gulp",
+    "hologram": "hologram -c hologram/config.yml",
     "start": ""
   },
   "author": "",

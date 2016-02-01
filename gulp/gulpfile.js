@@ -2,7 +2,7 @@
 
 var
   gulp, sass, browserSync, autoprefixer, sourcemaps,
-  cssnano;
+  cssnano, hologram;
 
 gulp = require( 'gulp' );
 sass = require( 'gulp-sass' );
@@ -10,6 +10,7 @@ browserSync = require( 'browser-sync' ).create();
 autoprefixer = require( 'gulp-autoprefixer' );
 sourcemaps = require( 'gulp-sourcemaps' );
 cssnano = require( 'gulp-cssnano' );
+hologram = require( 'gulp-hologram' );
 
 // task "css"
 gulp.task( 'css', function () {
@@ -20,7 +21,7 @@ gulp.task( 'css', function () {
   .pipe( sass().on( 'error', sass.logError ) )
   .pipe( autoprefixer() )
   .pipe( cssnano() )
-  .pipe( sourcemaps.write( 'map' ))
+  .pipe( sourcemaps.write( 'maps' ))
   .pipe( gulp.dest( '../build' ) )
   .pipe( browserSync.stream() );
 });
@@ -35,6 +36,13 @@ gulp.task( 'copy', function () {
   .pipe( browserSync.stream());
 });
 
+// task "hologram"
+gulp.task( 'hologram', function() {
+  return gulp.src( ['../hologram/config.yml'] )
+    .pipe( hologram() )
+    .pipe( browserSync.stream() );
+});
+
 // task "watch"
 gulp.task( 'watch', function () {
   browserSync.init({
@@ -43,11 +51,13 @@ gulp.task( 'watch', function () {
     }
   });
 
-  gulp.watch( ['../source/**/*.scss'], ['css'] );
+  gulp.watch( ['../hologram/**/*'], ['hologram'] );
+  gulp.watch( ['../source/**/*.scss'], ['css', 'hologram'] );
   gulp.watch([
     '../source/**/*',
     '!../source/**/*.scss'
   ], ['copy'] );
+
 });
 
-gulp.task( 'default', ['copy', 'css', 'watch'] );
+gulp.task( 'default', ['copy', 'css', 'hologram', 'watch'] );
