@@ -9,8 +9,9 @@ var cssnano = require( 'gulp-cssnano' );
 var hologram = require( 'gulp-hologram' );
 var uglify = require( 'gulp-uglify' );
 var plumber = require( 'gulp-plumber' );
+var concat = require( 'gulp-concat' );
 
-var src = src + '../source';
+var src = '../source';
 var dst = '../build';
 
 // task "css"
@@ -31,11 +32,15 @@ gulp.task( 'css', function () {
 // task "js"
 gulp.task( 'js', function () {
   return gulp.src([
-    src + '/js/*.js'
+    src + '/**/*.js',
+    '!' + src + '/**/lib/*.js'
   ])
   .pipe( plumber() )
+  .pipe( sourcemaps.init() )
+  .pipe( concat( 'js/app.min.js' ) )
   .pipe( uglify() )
-  .pipe( gulp.dest( dst + '/js' ))
+  .pipe( sourcemaps.write( 'maps' ))
+  .pipe( gulp.dest( dst ))
   .pipe( browserSync.stream() );
 });
 
@@ -73,8 +78,8 @@ gulp.task( 'watch', function () {
   gulp.watch([
     src + '/**/*',
     '!' + src + '/css/**/*.scss',
-    '!' + src + '/js/*.js'],
-    ['copy'] );
+    '!' + src + '/js/*.js'
+  ], ['copy'] );
 });
 
 gulp.task( 'default', ['copy', 'css', 'js', 'hologram', 'watch'] );
