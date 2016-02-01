@@ -1,38 +1,48 @@
 'use strict';
 
-var
-  gulp, sass, browserSync, autoprefixer, sourcemaps,
-  cssnano, hologram;
+var gulp = require( 'gulp' );
+var sass = require( 'gulp-sass' );
+var browserSync = require( 'browser-sync' ).create();
+var autoprefixer = require( 'gulp-autoprefixer' );
+var sourcemaps = require( 'gulp-sourcemaps' );
+var cssnano = require( 'gulp-cssnano' );
+var hologram = require( 'gulp-hologram' );
+var uglify = require( 'gulp-uglify' );
 
-gulp = require( 'gulp' );
-sass = require( 'gulp-sass' );
-browserSync = require( 'browser-sync' ).create();
-autoprefixer = require( 'gulp-autoprefixer' );
-sourcemaps = require( 'gulp-sourcemaps' );
-cssnano = require( 'gulp-cssnano' );
-hologram = require( 'gulp-hologram' );
+var src = src + '../source';
+var dst = '../build';
 
 // task "css"
 gulp.task( 'css', function () {
   return gulp.src([
-    '../source/**/*.scss'
+    src + '/**/*.scss'
   ])
   .pipe( sourcemaps.init() )
   .pipe( sass().on( 'error', sass.logError ) )
   .pipe( autoprefixer() )
   .pipe( cssnano() )
   .pipe( sourcemaps.write( 'maps' ))
-  .pipe( gulp.dest( '../build' ) )
+  .pipe( gulp.dest( dst ) )
   .pipe( browserSync.stream() );
 });
 
+// task "js"
+gulp.task( 'js', function () {
+  return gulp.src([
+    src + '/js/*.js'
+  ])
+  .pipe( uglify() )
+  .pipe( gulp.dest( dst + '/js' ))
+  .pipe( browserSync.stream() );
+});
 // task "copy"
 gulp.task( 'copy', function () {
   return gulp.src([
-    '../source/**/*',
-    '!../source/css/**/*.scss'
+    src + '/**/*',
+    '!' + src + '/css/**/*.scss',
+    '!' + src + '/js/*.js'
   ])
-  .pipe( gulp.dest( '../build' ) )
+  .pipe( gulp.dest( dst ) )
   .pipe( browserSync.stream());
 });
 
@@ -47,17 +57,18 @@ gulp.task( 'hologram', function() {
 gulp.task( 'watch', function () {
   browserSync.init({
     server: {
-      baseDir: '../build'
+      baseDir: dst
     }
   });
 
   gulp.watch( ['../hologram/**/*'], ['hologram'] );
-  gulp.watch( ['../source/**/*.scss'], ['css', 'hologram'] );
+  gulp.watch( [src + '/**/*.scss'], ['css', 'hologram'] );
+  gulp.watch( [src + '/js/*.js'], ['js'] );
   gulp.watch([
-    '../source/**/*',
-    '!../source/**/*.scss'
-  ], ['copy'] );
-
+    src + '/**/*',
+    '!' + src + '/css/**/*.scss',
+    '!' + src + '/js/*.js'],
+    ['copy'] );
 });
 
-gulp.task( 'default', ['copy', 'css', 'hologram', 'watch'] );
+gulp.task( 'default', ['copy', 'css', 'js', 'hologram', 'watch'] );
