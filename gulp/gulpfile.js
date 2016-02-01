@@ -38,6 +38,15 @@ gulp.task( 'js', function () {
   .pipe( gulp.dest( dst + '/js' ))
   .pipe( browserSync.stream() );
 });
+
+// task "hologram"
+gulp.task( 'hologram', function() {
+  return gulp.src( ['../hologram/config.yml'] )
+  .pipe( plumber() )
+  .pipe( hologram() )
+  .pipe( browserSync.stream() );
+});
+
 // task "copy"
 gulp.task( 'copy', function () {
   return gulp.src([
@@ -48,14 +57,6 @@ gulp.task( 'copy', function () {
   .pipe( plumber() )
   .pipe( gulp.dest( dst ) )
   .pipe( browserSync.stream());
-});
-
-// task "hologram"
-gulp.task( 'hologram', function() {
-  return gulp.src( ['../hologram/config.yml'] )
-  .pipe( plumber() )
-  .pipe( hologram() )
-  .pipe( browserSync.stream() );
 });
 
 // task "watch"
