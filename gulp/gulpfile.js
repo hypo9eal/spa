@@ -8,6 +8,7 @@ var sourcemaps = require( 'gulp-sourcemaps' );
 var cssnano = require( 'gulp-cssnano' );
 var hologram = require( 'gulp-hologram' );
 var uglify = require( 'gulp-uglify' );
+var plumber = require( 'gulp-plumber' );
 
 var src = src + '../source';
 var dst = '../build';
@@ -17,6 +18,7 @@ gulp.task( 'css', function () {
   return gulp.src([
     src + '/**/*.scss'
   ])
+  .pipe( plumber() )
   .pipe( sourcemaps.init() )
   .pipe( sass().on( 'error', sass.logError ) )
   .pipe( autoprefixer() )
@@ -31,6 +33,7 @@ gulp.task( 'js', function () {
   return gulp.src([
     src + '/js/*.js'
   ])
+  .pipe( plumber() )
   .pipe( uglify() )
   .pipe( gulp.dest( dst + '/js' ))
   .pipe( browserSync.stream() );
@@ -42,6 +45,7 @@ gulp.task( 'copy', function () {
     '!' + src + '/css/**/*.scss',
     '!' + src + '/js/*.js'
   ])
+  .pipe( plumber() )
   .pipe( gulp.dest( dst ) )
   .pipe( browserSync.stream());
 });
@@ -49,8 +53,9 @@ gulp.task( 'copy', function () {
 // task "hologram"
 gulp.task( 'hologram', function() {
   return gulp.src( ['../hologram/config.yml'] )
-    .pipe( hologram() )
-    .pipe( browserSync.stream() );
+  .pipe( plumber() )
+  .pipe( hologram() )
+  .pipe( browserSync.stream() );
 });
 
 // task "watch"
