@@ -9,7 +9,11 @@ linters:
     force_nesting: false
 
   PropertySortOrder:
-    enabled: false
+    enabled: true,
+    order: recess
 
   SelectorDepth:
+    enabled: false
+
+  TrailingWhitespace:
     enabled: false
