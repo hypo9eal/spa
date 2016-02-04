@@ -1,15 +1,28 @@
-/*
-  spa.css
-*/
+/**
+ * spa.css
+ * - 基本スタイル
+ * - namespace: spa
+ */
+
+/**
+ * import
+ */
 
 @import 'lib/normalize.css';
+
+/**
+ * vars
+ */
 
 $dark-gray: #444;
 $mid-gray: #777;
 $white: #fff;
 $black: #000;
-// basics
 
+/**
+ * basics
+ */
+ 
 body {
   font: 13px 'Trebuchet MS', Valdana, Helvetica, Arial, sans-serif;
   color: $dark-gray;
@@ -41,7 +54,9 @@ ul::after {
   content: '';
 }
 
-// namespace: spa
+/**
+ * namespace: spa
+ */
 
 .spa {
   position: absolute;
@@ -55,8 +70,6 @@ ul::after {
   background-color: $white;
   border-radius: 0 8px;
 }
-
-// utility
 
 /*doc
 ---
