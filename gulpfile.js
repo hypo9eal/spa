@@ -11,13 +11,14 @@ var uglify = require( 'gulp-uglify' );
 var plumber = require( 'gulp-plumber' );
 var concat = require( 'gulp-concat' );
 
-var src = '../source';
-var dst = '../build';
+var src = 'source';
+var dst = 'build';
 
 // task "css"
 gulp.task( 'css', function () {
   return gulp.src([
-    src + '/**/*.scss'
+    src + '/**/*.scss',
+    src + '/**/*.css'
   ])
   .pipe( plumber() )
   .pipe( sourcemaps.init() )
@@ -46,7 +47,7 @@ gulp.task( 'js', function () {
 
 // task "hologram"
 gulp.task( 'hologram', function() {
-  return gulp.src( ['../hologram/config.yml'] )
+  return gulp.src( ['hologram/config.yml'] )
   .pipe( plumber() )
   .pipe( hologram() )
   .pipe( browserSync.stream() );
@@ -57,6 +58,7 @@ gulp.task( 'copy', function () {
   return gulp.src([
     src + '/**/*',
     '!' + src + '/css/**/*.scss',
+    '!' + src + '/css/**/*.css',
     '!' + src + '/js/*.js'
   ])
   .pipe( plumber() )
@@ -72,7 +74,7 @@ gulp.task( 'watch', function () {
     }
   });
 
-  gulp.watch( ['../hologram/**/*'], ['hologram'] );
+  gulp.watch( ['hologram/**/*'], ['hologram'] );
   gulp.watch( [src + '/**/*.scss'], ['css', 'hologram'] );
   gulp.watch( [src + '/js/*.js'], ['js'] );
   gulp.watch([
