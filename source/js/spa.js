@@ -1,13 +1,15 @@
-/*
-  spa.js
-*/
+/**
+ * spa.js
+ * - spaの定義
+ * - spaの初期化
+ */
 
 var spa = ( function ( $ ) {
   var initModule;
 
   /**
    * public spaを初期化する
-   * @param  {jQueryObject} $container [description]
+   * @param  {Object} $container spaコンテナのjQueryObject
    */
   initModule = function ( $container ) {
     spa.shell.initModule( $container );
