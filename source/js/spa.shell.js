@@ -60,7 +60,6 @@ spa.shell = ( function () {
 
   /**
    * private jQuryオブジェクトをキャッシュする
-   * @param {jQueryObject} $container [description]
    */
   setJqueryMap = function () {
     var $container = stateMap.$container;
