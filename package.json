@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "desc",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "normalize.css": "^3.0.3"
+  },
   "devDependencies": {
     "browser-sync": "^2.11.1",
     "eslint": "^1.10.3",
