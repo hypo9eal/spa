@@ -3,9 +3,21 @@
  * namespace: spa-shell
  */
 
-.spa-shell-head, .spa-shell-head-logo, .spa-shell-head-acct,
-.spa-shell-head-search, .spa-shell-main, .spa-shell-main-nav,
-.spa-shell-main-content, .spa-shell-foot, .spa-shell-chat,
+/**
+ * vars
+ */
+
+@import 'vars';
+
+.spa-shell-head,
+.spa-shell-head-logo,
+.spa-shell-head-acct,
+.spa-shell-head-search,
+.spa-shell-main,
+.spa-shell-main-nav,
+.spa-shell-main-content,
+.spa-shell-foot,
+.spa-shell-chat,
 .spa-shell-modal {
   position: absolute;
 }
@@ -100,6 +112,6 @@
   height: 400px;
   margin-top: -200px;
   margin-left: -200px;
-  background: white;
+  background: $white;
   border-radius: 3px;
 }
