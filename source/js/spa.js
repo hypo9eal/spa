@@ -9,6 +9,7 @@ var spa = ( function ( $ ) {
 
   /**
    * public spaを初期化する
+   * - シェルを初期化する
    * @param  {Object} $container spaコンテナのjQueryObject
    */
   initModule = function ( $container ) {
