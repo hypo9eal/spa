@@ -10,16 +10,13 @@ spa.shell = ( function () {
   var
     /**
      * 各種設定
+     * @type {Object} configMap 各種設定
      * @type {String} main_html spaコンテナの初期化時のDOM
      * @type {Number} chat_*_time chatコンテナの開閉デュレーション
      * @type {Number} chat_*_height chatコンテナの開閉時のheight
      * @type {String} chat_*_title chatコンテナの開閉時のtitle属性値
      */
     configMap = {
-      /**
-       * URIアンカーのスキーマ
-       * @type {Object} chat chatコンテナの開閉状態
-       */
       anchor_schema_map: {
         chat : {
           open: true,
@@ -84,7 +81,7 @@ spa.shell = ( function () {
   // DOM関連メソッド 開始 --------------------------------------------------------
 
   /**
-   * private jQuryオブジェクトをキャッシュする
+   * jQuryオブジェクトをキャッシュする
    */
   setJqueryMap = function () {
     var $container = stateMap.$container;
@@ -95,7 +92,7 @@ spa.shell = ( function () {
   };
 
   /**
-   * private chatコンテナを開閉する
+   * chatコンテナを開閉する
    * @param  {Bool} do_extend chatコンテナを開くか否か
    * @param  {Function} callback 開閉後のコールバック関数
    * @return {Bool} [description]
@@ -250,7 +247,7 @@ spa.shell = ( function () {
   // イベントハンドラ 終了 --------------------------------------------------------
 
   /**
-   * public シェルを初期化する
+   * シェルを初期化する
    * - spaコンテナのjQueryObjectを取得してstateMapに保存
    * - spaコンテナにDOMを生成
    * - spaコンテナのjQueryObjectをキャッシュ
