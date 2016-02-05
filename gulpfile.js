@@ -33,8 +33,11 @@ gulp.task( 'css', function () {
 // task "js"
 gulp.task( 'js', function () {
   return gulp.src([
-    src + '/**/*.js',
-    '!' + src + '/**/lib/*.js'
+    src + '/js/spa.js',
+    src + '/js/spa.util.js',
+    src + '/js/spa.model.js',
+    src + '/js/spa.shell.js',
+    src + '/js/spa.chat.js'
   ])
   .pipe( plumber() )
   .pipe( sourcemaps.init() )
