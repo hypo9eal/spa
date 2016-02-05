@@ -270,10 +270,16 @@ spa.shell = ( function () {
       .attr( 'title', configMap.chat_retracted_title )
       .on( 'click', onClickChat );
 
+    // uriアンカーのスキーマを設定
     $.uriAnchor.configModule({
       schema_map: configMap.anchor_schema_map
     });
 
+    // chatモジュールを設定して初期化
+    spa.chat.configModule( {} );
+    spa.chat.initModule( jqueryMap.$chat );
+
+    // hashchangeイベントハンドラの割り当て
     $( window )
       .on( 'hashchange', onHashChange )
       .trigger( 'hashchange' );
