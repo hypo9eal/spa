@@ -9,8 +9,7 @@ linters:
     force_nesting: false
 
   PropertySortOrder:
-    enabled: true,
-    order: recess
+    enabled: false
 
   SelectorDepth:
     enabled: false
