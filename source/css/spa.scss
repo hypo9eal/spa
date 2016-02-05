@@ -1,12 +1,59 @@
-$mid-gray: #777;
-$white: #fff;
+/**
+ * spa.css
+ * - 基本スタイル
+ * - namespace: spa
+ */
+
+/**
+ * reset
+ */
+
+@import 'lib/normalize';
+
+/**
+ * vars
+ */
+
+@import 'vars';
+
+/**
+ * basics
+ */
 
 body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+  font: 13px 'Trebuchet MS', Valdana, Helvetica, Arial, sans-serif;
+  color: $dark-gray;
   background-color: $mid-gray;
 }
+
+a {
+  text-decoration: none;
+
+  a:link,
+  a:visited {
+    color: inherit;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+strong {
+  font-weight: 800;
+  color: $black;
+}
+
+div::after,
+ul::after {
+  display: block;
+  clear: both;
+  content: '';
+}
+
+/**
+ * namespace: spa
+ */
 
 .spa {
   position: absolute;
@@ -14,19 +61,11 @@ body {
   right: 8px;
   bottom: 8px;
   left: 8px;
+  min-width: 500px;
+  min-height: 500px;
+  overflow: hidden;
   background-color: $white;
-  border-radius: 8px 8px 0;
-}
-
-.spa-slider {
-  position: absolute;
-  right: 2px;
-  bottom: 0;
-  width: 300px;
-  height: 16px;
-  cursor: pointer;
-  background-color: $mid-gray;
-  border-radius: 8px 0 0;
+  border-radius: 0 8px;
 }
 
 /*doc

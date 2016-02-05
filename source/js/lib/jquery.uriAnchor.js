@@ -24,7 +24,7 @@
     //---------------- BEGIN MODULE SCOPE VARIABLES --------------
     var
       configMap = {
-        clean0_regex     : /^[#!]*/,
+        clean0_regex     : /^[#]*/,
         clean1_regex     : /\?[^?]*$/,
         settable_map_key : { schema_map : true },
         schema_map       : null
@@ -266,7 +266,7 @@
     //    });
     //
     //  This changes the URI anchor to:
-    //     #!page=profile&slider=confirm&color=red
+    //     #page=profile&slider=confirm&color=red
     //
     //  All these arguments are independent, that is, they can vary
     //  independent of each other. We also support dependent values -
@@ -286,7 +286,7 @@
     //    });
     //
     //  This changes the URI Anchor to:
-    //    #!page=profile:uname,wendy|online,today
+    //    #page=profile:uname,wendy|online,today
     //
     //  Only independent keys and their matching dependent keys are
     //  processed.  All other keys are ignored.  Importantly, this includes
@@ -308,7 +308,7 @@
     //    });
     //
     //  This sets the URI Anchor to:
-    //     #!page=profile:uname,wendy|online,today&slider=confirm:text,hello\
+    //     #page=profile:uname,wendy|online,today&slider=confirm:text,hello\
     //       |pretty,false&color=red
     //
     //   Options: The second positional argument tp this method, option_map,
@@ -361,12 +361,12 @@
 
       uri_array = document.location.href.split( '#',2 );
       uri_string = anchor_string
-        ? uri_array[0] + '#!' + anchor_string : uri_array[0]
+        ? uri_array[0] + '#' + anchor_string : uri_array[0]
         ;
 
       if ( replace_flag  ) {
         if ( anchor_string  ) {
-          document.location.replace( uri_array[0] + '#!' + anchor_string );
+          document.location.replace( uri_array[0] + '#' + anchor_string );
         }
         else {
           document.location.replace( uri_array[0] );
@@ -404,7 +404,7 @@
     //
     // Example:
     //   If the browser URI Anchor looks like this:
-    //     #!page=profile:uname,wendy|online,true&slider=confirm:text,hello\
+    //     #page=profile:uname,wendy|online,true&slider=confirm:text,hello\
     //     |pretty,false&color=red
     //
     //   Then calling $.uriAnchor.makeAnchorMap();
