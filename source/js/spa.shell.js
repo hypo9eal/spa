@@ -16,6 +16,16 @@ spa.shell = ( function () {
      * @type {String} chat_*_title chatコンテナの開閉時のtitle属性値
      */
     configMap = {
+      /**
+       * URIアンカーのスキーマ
+       * @type {Object} chat chatコンテナの開閉状態
+       */
+      anchor_schema_map: {
+        chat : {
+          open: true,
+          closed: true
+        }
+      },
       main_html: [
         '<div class="spa-shell-head">',
         '<div class="spa-shell-head-logo"></div>',
@@ -40,10 +50,12 @@ spa.shell = ( function () {
     /**
      * 各種状態
      * @type {Object} $container spaコンテナのjQueryObject
+     * @type {Object} anchor_map URIアンカーの値
      * @type {Bool} is_chat_retracted chatコンテナが閉じているか否か
      */
     stateMap = {
       $container: null,
+      anchor_map: {},
       is_chat_retracted: true
     },
 
@@ -54,7 +66,20 @@ spa.shell = ( function () {
     jqueryMap = {},
 
     // メソッド群
-    setJqueryMap, toggleChat, onClickChat, initModule;
+    copyAnchorMap, setJqueryMap, toggleChat, changeAnchorPart,
+    onHashChange, onClickChat, initModule;
+
+  // ユーティリティメソッド 開始 ---------------------------------------------------
+
+  /**
+   * 現在のURIアンカーの値をコピーする
+   * @return {Object} コピーされたオブジェクト
+   */
+  copyAnchorMap = function () {
+    return $.extend( true, {}, stateMap.anchor_map );
+  };
+
+  // ユーティリティメソッド 終了 ---------------------------------------------------
 
   // DOM関連メソッド 開始 --------------------------------------------------------
 
@@ -118,12 +143,107 @@ spa.shell = ( function () {
     }
   };
 
+  /**
+   * URIアンカーを変更する
+   * @param  {Object} arg_map 変更後のURIアンカーの値を示すオブジェクト
+   * @return {Bool} URIアンカーの変更の成否
+   */
+  changeAnchorPart = function ( arg_map ) {
+    var
+      anchor_map_revise = copyAnchorMap(),
+      bool_return = true,
+      key_name, key_name_dep;
+
+    KEYVAL:
+    for ( key_name in arg_map ) {
+      if ( arg_map.hasOwnProperty( key_name ) ) {
+        if ( key_name.indexOf( '_' ) === 0) {
+          continue KEYVAL;
+        }
+
+        anchor_map_revise[key_name] = arg_map[key_name];
+
+        key_name_dep = '_' + key_name;
+
+        if ( arg_map[key_name_dep] ) {
+          anchor_map_revise[key_name_dep] = arg_map[key_name_dep];
+        } else {
+          delete anchor_map_revise[key_name_dep];
+          delete anchor_map_revise['_s' + key_name_dep];
+        }
+      }
+    }
+
+    try {
+      $.uriAnchor.setAnchor( anchor_map_revise );
+    } catch ( error ) {
+      $.uriAnchor.setAnchor( stateMap.anchor_map, null, true);
+      bool_return = false;
+    }
+
+    return bool_return;
+  };
+
   // DOM関連メソッド 終了 --------------------------------------------------------
 
   // イベントハンドラ 開始 --------------------------------------------------------
 
+  /**
+   * hashchangeのイベンントハンドラ
+   * - URIアンカーをアンカーマップに変換
+   * - アンカーマップを比較
+   * - 状態変化があれば、値に応じてchatコンテナを開閉
+   * @param  {[Object]} event [description]
+   * @return {[Bool]} [description]
+   */
+  onHashChange = function ( event ) {
+    var
+      anchor_map_previous = copyAnchorMap(),
+      anchor_map_proposed,
+      _s_chat_previous, _s_chat_proposed,
+      s_chat_proposed;
+
+    try {
+      anchor_map_proposed = $.uriAnchor.makeAnchorMap();
+    } catch ( error ) {
+      $.uriAnchor.setAnchor( anchor_map_previous, null, true );
+      return false;
+    }
+    stateMap.anchor_map = anchor_map_proposed;
+
+    _s_chat_previous = anchor_map_previous._s_chat;
+    _s_chat_proposed = anchor_map_proposed._s_chat;
+
+    if ( ! anchor_map_previous || _s_chat_previous !== _s_chat_proposed ) {
+      s_chat_proposed = anchor_map_proposed.chat;
+      switch ( s_chat_proposed ) {
+        case 'open':
+          toggleChat( true );
+          break;
+
+        case 'closed':
+          toggleChat( false );
+          break;
+
+        default:
+          toggleChat( false );
+          delete anchor_map_proposed.chat;
+          $.uriAnchor.setAnchor( anchor_map_proposed, null, true );
+      }
+    }
+
+    return false;
+  };
+
+  /**
+   * clickchatのイベントハンドラ
+   * @return {[Bool]} [description]
+   */
   onClickChat = function () {
-    toggleChat(stateMap.is_chat_retracted);
+    changeAnchorPart({
+      chat: ( stateMap.is_chat_retracted ? 'open' : 'closed' )
+    });
+
     return false;
   };
 
@@ -150,8 +270,16 @@ spa.shell = ( function () {
     // chatコンテナを初期化
     stateMap.is_chat_retracted = true;
     jqueryMap.$chat
-      .attr( 'title', configMap.chat_retracted_title)
+      .attr( 'title', configMap.chat_retracted_title )
       .on( 'click', onClickChat );
+
+    $.uriAnchor.configModule({
+      schema_map: configMap.anchor_schema_map
+    });
+
+    $( window )
+      .on( 'hashchange', onHashChange )
+      .trigger( 'hashchange' );
   };
 
   return {
