@@ -1,6 +1,6 @@
 /**
  * spa.util.js
- * - spa.utilの定義（汎用メソッド）
+ * - spa.utilの定義（基本ユーティリティモジュール）
  */
 
 spa.util = ( function () {

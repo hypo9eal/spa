@@ -1,6 +1,9 @@
 /**
  * spa.chat.js
- * - spa.chatの定義（chatモジュール）
+ * - spa.chatの定義（チャットモジュール）
+ * - chatモジュールの初期化と調整
+ * - chatコンテナの開閉
+ * - chatモジュールの状態管理
  */
 
 spa.chat = ( function () {
