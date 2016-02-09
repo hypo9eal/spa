@@ -27,7 +27,8 @@
     "jquery": true
   },
   "globals": {
-    "spa": false
+    "spa": false,
+    "TAFFY": false
   },
   "extends": "eslint:recommended",
   "plugins": [
