@@ -17,15 +17,17 @@ var dst = 'build';
 // task "css"
 gulp.task( 'css', function () {
   return gulp.src([
-    src + '/**/*.scss',
-    src + '/**/*.css'
+    src + '/css/spa.scss',
+    src + '/css/spa.shell.scss',
+    src + '/css/spa.chat.scss'
   ])
   .pipe( plumber() )
   .pipe( sourcemaps.init() )
   .pipe( sass().on( 'error', sass.logError ) )
   .pipe( autoprefixer() )
+  .pipe( concat( 'css/spa.min.css') )
   .pipe( cssnano() )
-  .pipe( sourcemaps.write( 'maps' ))
+  .pipe( sourcemaps.write( 'maps' ) )
   .pipe( gulp.dest( dst ) )
   .pipe( browserSync.stream() );
 });
@@ -41,9 +43,9 @@ gulp.task( 'js', function () {
   ])
   .pipe( plumber() )
   .pipe( sourcemaps.init() )
-  .pipe( concat( 'js/app.min.js' ) )
+  .pipe( concat( 'js/spa.min.js' ) )
   .pipe( uglify() )
-  .pipe( sourcemaps.write( 'maps' ))
+  .pipe( sourcemaps.write( 'maps' ) )
   .pipe( gulp.dest( dst ))
   .pipe( browserSync.stream() );
 });
@@ -66,7 +68,7 @@ gulp.task( 'copy', function () {
   ])
   .pipe( plumber() )
   .pipe( gulp.dest( dst ) )
-  .pipe( browserSync.stream());
+  .pipe( browserSync.stream() );
 });
 
 // task "watch"
