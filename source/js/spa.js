@@ -5,6 +5,8 @@
  */
 
 var spa = ( function ( $ ) {
+  'use strict';
+
   var initModule;
 
   /**
@@ -13,6 +15,7 @@ var spa = ( function ( $ ) {
    * @param  {Object} $container spaコンテナのjQueryObject
    */
   initModule = function ( $container ) {
+    spa.model.initModule();
     spa.shell.initModule( $container );
   };
 
