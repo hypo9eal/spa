@@ -57,12 +57,12 @@ ul::after {
 
 .spa {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  bottom: 8px;
-  left: 8px;
-  min-width: 500px;
-  min-height: 500px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  min-width: 35em;
+  min-height: 15em;
   overflow: hidden;
   background-color: $white;
   border-radius: 0 8px;

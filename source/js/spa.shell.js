@@ -12,6 +12,7 @@ spa.shell = ( function () {
      * 各種設定
      * @type {Object} anchor_schema_map 各種設定
      * @type {String} main_html spaコンテナの初期化時のDOM
+     * @type {Number} resize_interval resizeイベントを捕捉する間隔(ms)
      */
     configMap = {
       anchor_schema_map: {
@@ -31,15 +32,18 @@ spa.shell = ( function () {
         '<div class="spa-shell-main-content"></div>',
         '</div>',
         '<div class="spa-shell-foot"></div>',
-        '<div class="spa-shell-modal"></div>'].join('')
+        '<div class="spa-shell-modal"></div>'].join(''),
+      resize_interval: 200
     },
 
     /**
      * 各種状態
      * @type {Object} anchor_map URIアンカーの値
+     * @type {Number} タイマーID
      */
     stateMap = {
-      anchor_map: {}
+      anchor_map: {},
+      resize_idto: null
     },
 
     /**
@@ -49,7 +53,7 @@ spa.shell = ( function () {
     jqueryMap = {},
 
     copyAnchorMap, setJqueryMap, changeAnchorPart,
-    onHashChange, setChatAnchor, initModule;
+    onHashChange, onResize, setChatAnchor, initModule;
 
   // ユーティリティメソッド 開始 ---------------------------------------------------
 
@@ -185,6 +189,25 @@ spa.shell = ( function () {
     return changeAnchorPart( { chat : position_type } );
   };
 
+  /**
+   * handleResizeを実行するタイマーを実行する
+   * - タイマーIDがあればスキップする。なければ新しいタイマーを実行する
+   * @return {Bool} [description]
+   */
+  onResize = function () {
+    if ( stateMap.resize_idto ) { return true; }
+
+    spa.chat.handleResize();
+    stateMap.resize_idto = setTimeout(
+      function () {
+        stateMap.resize_idto = null;
+      },
+      configMap.resize_interval
+    );
+
+    return true;
+  };
+
   // イベントハンドラ 終了 --------------------------------------------------------
 
   /**
@@ -220,6 +243,7 @@ spa.shell = ( function () {
 
     // hashchangeイベントハンドラの割り当て
     $( window )
+      .on( 'resize', onResize )
       .on( 'hashchange', onHashChange )
       .trigger( 'hashchange' );
   };

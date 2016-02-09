@@ -13,11 +13,13 @@ spa.chat = ( function () {
      * @type {String} slider_close_time
      * @type {String} slider_opened_em chatコンテナの開閉後の高さ(em)
      * @type {String} slider_closed_em
+     * @type {String} slider_opened_min_em chatコンテナの最小高さ(em)
+     * @type {String} window_height_min_em windowの最小高さ(em)
      * @type {String} slider_opened_title chatコンテナの開閉後のtitle属性値
      * @type {String} slider_closed_title
      * @type {String} chat_model chatモデルとのやりとりに使用するオブジェクト
      * @type {String} people_model peopleモデルとのやりとりに使用するオブジェクト
-     * @type {String} set_chat_anchor ***
+     * @type {Function} set_chat_anchor shellから受け取ったsetChatAnchorメソッド
      */
     configMap = {
       main_html: [
@@ -51,8 +53,10 @@ spa.chat = ( function () {
 
       slider_open_time: 250,
       slider_close_time: 250,
-      slider_opened_em: 16,
+      slider_opened_em: 18,
       slider_closed_em: 2,
+      slider_opened_min_em: 10,
+      window_height_min_em: 20,
       slider_opened_title: 'Click to close',
       slider_closeed_title: 'Click to open',
 
@@ -81,12 +85,13 @@ spa.chat = ( function () {
     jqueryMap = {},
 
     setJqueryMap, getEmSize, setPxSizes, setSliderPosition,
-    onClickToggle, configModule, initModule;
+    onClickToggle, configModule, initModule,
+    removeSlider, handleResize;
 
   // ユーティリティメソッド 開始 ---------------------------------------------------
 
   /**
-   * DOM要素のfont-sizeを実測値で返す
+   * private DOM要素のfont-sizeを実測値で返す
    * @param  {Object} elem 対象のDOMObject
    * @return {Number} [description]
    */
@@ -101,7 +106,7 @@ spa.chat = ( function () {
   // DOM関連メソッド 開始 --------------------------------------------------------
 
   /**
-   * jQuryオブジェクトをキャッシュする
+   * private jQuryオブジェクトをキャッシュする
    */
   setJqueryMap = function () {
     var
@@ -121,17 +126,24 @@ spa.chat = ( function () {
   };
 
   /**
-   * chatコンテナのfont-sizeを元に各種設定値のem->px変換をする
+   * private
+   * - chatコンテナのfont-sizeを元に各種設定値のem->px変換をする
+   * - chatコンテナの高さを設定する
    */
   setPxSizes = function () {
-    var px_per_em, opened_height_em;
+    var px_per_em, window_height_em, opened_height_em;
     px_per_em = getEmSize( jqueryMap.$slider.get( 0 ) );
+    window_height_em = Math.floor(
+      ( $(window).height() / px_per_em ) + 0.5
+    );
 
-    opened_height_em = configMap.slider_opened_em;
+    opened_height_em =
+      window_height_em > configMap.window_height_min_em
+      ? configMap.slider_opened_em : configMap.slider_opened_min_em;
 
     stateMap.px_per_em = px_per_em;
     stateMap.slider_closed_px = configMap.slider_closed_em * px_per_em;
-    stateMap.slider_opened_px = configMap.slider_opened_em * px_per_em;
+    stateMap.slider_opened_px = opened_height_em * px_per_em;
     jqueryMap.$sizer.css({
       height: ( opened_height_em - 2 ) * px_per_em
     });
@@ -192,11 +204,47 @@ spa.chat = ( function () {
 
     return true;
   };
+
+  /**
+   * public chatコンテナと付随する各種キャッシュを削除する
+   * @return {Bool} [description]
+   */
+  removeSlider = function () {
+    if ( jqueryMap.$slider ) {
+      jqueryMap.$slider.remove();
+      jqueryMap = {};
+    }
+    stateMap.$append_target = null;
+    stateMap.position_type = 'closed';
+
+    configMap.chat_model = null;
+    configMap.people_model = null;
+    configMap.set_chat_anchor = null;
+
+    return true;
+  };
+  /**
+   * public chatコンテナの高さを調整する
+   * @return {[type]} [description]
+   */
+  handleResize = function () {
+    if ( ! jqueryMap.$slider ) { return false; }
+
+    setPxSizes();
+    if ( stateMap.position_type === 'opened' ) {
+      jqueryMap.$slider.css({
+        height: stateMap.slider_opened_px
+      });
+      return true;
+    }
+  };
+
   // DOM関連メソッド 終了 --------------------------------------------------------
 
   // イベントハンドラ 開始 --------------------------------------------------------
 
   /**
+   * private
    * @param  {[type]} event [description]
    */
   onClickToggle = function ( event ) {
@@ -214,7 +262,7 @@ spa.chat = ( function () {
   // イベントハンドラ 終了 --------------------------------------------------------
 
   /**
-   * モジュールの設定をする
+   * public モジュールの設定をする
    * @param  {Object} input_map 適用する設定のマップオブジェクト
    * @return {Object} publicなメソッドを格納したオブジェクト
    */
@@ -228,7 +276,7 @@ spa.chat = ( function () {
   };
 
   /**
-   * モジュールの初期化をする
+   * public モジュールの初期化をする
    * @param  {Object} $append_target モジュールの展開先のjQueryObject
    */
   initModule = function ( $append_target ) {
@@ -247,6 +295,8 @@ spa.chat = ( function () {
   return {
     setSliderPosition: setSliderPosition,
     configModule: configModule,
-    initModule: initModule
+    initModule: initModule,
+    removeSlider: removeSlider,
+    handleResize: handleResize
   };
 }());
