@@ -43,7 +43,7 @@ spa.shell = ( function () {
      */
     stateMap = {
       anchor_map: {},
-      resize_idto: null
+      resize_idto: undefined
     },
 
     /**
@@ -200,7 +200,7 @@ spa.shell = ( function () {
     spa.chat.handleResize();
     stateMap.resize_idto = setTimeout(
       function () {
-        stateMap.resize_idto = null;
+        stateMap.resize_idto = undefined;
       },
       configMap.resize_interval
     );
