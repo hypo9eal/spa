@@ -3,6 +3,8 @@
  * - spa.modelの定義（モデル）
  */
 
+/* global TAFFY:false */
+
 spa.model = ( function () {
   'use strict';
 

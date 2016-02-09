@@ -3,6 +3,8 @@
  * - spa.fakeの定義（テスト用データモジュール）
  */
 
+/* eslint-env node */
+
 spa.fake = ( function () {
   'use strict';
 

@@ -6,6 +6,8 @@
  * - chatモジュールの状態管理
  */
 
+/* eslint-env browser, jquery */
+
 spa.chat = ( function () {
   var
     /**

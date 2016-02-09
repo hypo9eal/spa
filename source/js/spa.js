@@ -4,6 +4,8 @@
  * - spaの初期化
  */
 
+/* eslint-env browser, jquery */
+
 var spa = ( function ( $ ) {
   'use strict';
 

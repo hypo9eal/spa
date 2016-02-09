@@ -3,6 +3,8 @@
  * - spa.util_bの定義（ブラウザ向けユーティリティモジュール）
  */
 
+/* eslint-env browser, jquery */
+
 spa.util_b = ( function () {
   'use strict';
 

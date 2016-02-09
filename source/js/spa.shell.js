@@ -6,6 +6,8 @@
  * - 状態管理
  */
 
+/* eslint-env browser, jquery */
+
 spa.shell = ( function () {
   var
     /**

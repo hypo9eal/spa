@@ -22,13 +22,10 @@
   },
   "env": {
     "es6": true,
-    "node": true,
-    "browser": true,
-    "jquery": true
+    "node": true
   },
   "globals": {
-    "spa": false,
-    "TAFFY": false
+    "spa": false
   },
   "extends": "eslint:recommended",
   "plugins": [
