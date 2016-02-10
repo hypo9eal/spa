@@ -19,11 +19,13 @@ spa.model = ( function () {
 
     /**
      * 各種状態
+     * @type {Object} user 現在のユーザのオブジェクト
      * @type {Object} anon_user 匿名ユーザのオブジェクト
      * @type {Object} people_cid_map cidをkeyとしたPersonオブジェクトのコレクション
      * @type {Object} people_db DBオブジェクト
      */
     stateMap = {
+      user: null,
       anon_user: null,
       people_cid_map: {},
       people_db: TAFFY()
@@ -38,7 +40,8 @@ spa.model = ( function () {
 
   /**
    * Personオブジェクトのプロトタイプ
-   * @type {Object}
+   * @return {Bool} get_is_user このユーザーが現在のユーザーか否か
+   * @return {Bool} get_is_anon このユーザーが匿名ユーザーか否か
    */
   personProto = {
     get_is_user: function () {
@@ -84,7 +87,8 @@ spa.model = ( function () {
 
   /**
    * public Peopleオブジェクトのプロトタイプ
-   * @type {Object}
+   * @return {Object} get_db PeopleオブジェクトのDBオブジェクト
+   * @return {Object} get_cid_map cidをkeyとしたPeopleオブジェクト
    */
   people = {
     get_db: function () {
@@ -103,6 +107,7 @@ spa.model = ( function () {
    */
   initModule = function () {
     var
+      i,
       people_list,
       person_map;
 
@@ -116,7 +121,7 @@ spa.model = ( function () {
 
     if ( isFakeData ) {
       people_list = spa.fake.getPeopleList();
-      for (let i = 0; i < people_list.length; i++ ) {
+      for (i = 0; i < people_list.length; i++ ) {
         person_map = people_list[ i ];
         makePerson({
           cid: person_map._id,
