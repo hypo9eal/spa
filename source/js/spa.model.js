@@ -5,7 +5,7 @@
  * - peopleオブジェクトの定義
  */
 
-/* eslint-env jquery */
+/* eslint-env jquery, browser */
 /* global TAFFY:false */
 
 spa.model = ( function () {
@@ -34,6 +34,10 @@ spa.model = ( function () {
       cid_serial: 0,
       people_cid_map: {},
       people_db: TAFFY()
+    },
+
+    jqueryMap = {
+      $document: $( document )
     },
 
     /**
@@ -104,7 +108,7 @@ spa.model = ( function () {
     stateMap.user.css_map = user_map.css_map;
     stateMap.people_cid_map[ user_map._id ] = stateMap.user;
 
-    $.gevent.publish( 'spa-login', [ stateMap.user ] );
+    jqueryMap.$document.trigger( 'spa-login', [ stateMap.user ] );
   };
 
   /**
@@ -236,7 +240,7 @@ spa.model = ( function () {
       is_removed = removePerson( user );
       stateMap.user = stateMap.anon_user;
 
-      $.gevent.publish( 'spa-logout', [ user ] );
+      jqueryMap.$document.trigger( 'spa-logout', [ user ] );
 
       return is_removed;
     };

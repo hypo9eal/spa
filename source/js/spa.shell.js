@@ -9,6 +9,8 @@
 /* eslint-env browser, jquery */
 
 spa.shell = ( function () {
+  'use strict';
+
   var
     /**
      * 各種設定
@@ -25,9 +27,12 @@ spa.shell = ( function () {
       },
       main_html: [
         '<div class="spa-shell-head">',
-        '<div class="spa-shell-head-logo"></div>',
+        '<div class="spa-shell-head-logo">',
+        '<h1>SPA</h1>',
+        '<p>javascript end to end</p>',
+        '</div>',
         '<div class="spa-shell-head-acct"></div>',
-        '<div class="spa-shell-head-search"></div>',
+        // '<div class="spa-shell-head-search"></div>',
         '</div>',
         '<div class="spa-shell-main">',
         '<div class="spa-shell-main-nav"></div>',
@@ -55,7 +60,8 @@ spa.shell = ( function () {
     jqueryMap = {},
 
     copyAnchorMap, setJqueryMap, changeAnchorPart,
-    onHashChange, onResize, setChatAnchor, initModule;
+    onHashChange, onResize, onTapAcct, onLogin, onLogout,
+    setChatAnchor, initModule;
 
   // ユーティリティメソッド 開始 ---------------------------------------------------
 
@@ -77,7 +83,10 @@ spa.shell = ( function () {
   setJqueryMap = function () {
     var $container = stateMap.$container;
     jqueryMap = {
-      $container: $container
+      $document: $(document),
+      $container: $container,
+      $acct: $container.find( '.spa-shell-head-acct' ),
+      $nav: $container.find( '.spa-shell-main-nav' )
     };
   };
 
@@ -210,6 +219,45 @@ spa.shell = ( function () {
     return true;
   };
 
+  /**
+   * ログインプロンプトを表示し、ログイン処理を実行する
+   * @param  {Object} event [description]
+   */
+  onTapAcct = function ( event ) {
+    var
+      acct_text,
+      user_name,
+      user = spa.model.people.get_user();
+
+    event.preventDefault();
+
+    if ( user.get_is_anon() ) {
+      user_name = prompt( 'Please sign-in ');
+      spa.model.people.login( user_name );
+      jqueryMap.$acct.text( '...processing...' );
+    } else {
+      spa.model.people.logout();
+    }
+  };
+
+  /**
+   * ログインユーザー名を表示する
+   * @param  {Object} event [description]
+   * @param  {Object} login_user ログインしたユーザーのオブジェクト
+   */
+  onLogin = function ( event, login_user ) {
+    jqueryMap.$acct.text( login_user.name );
+  };
+
+  /**
+   * ログインを促すメッセージを表示する
+   * @param  {Object} event [description]
+   * @param  {Object} logout_user ログアウトしたユーザーのオブジェクト
+   */
+  onLogout = function ( event, logout_user ) {
+    jqueryMap.$acct.text( 'Please sign-in.' );
+  };
+
   // イベントハンドラ 終了 --------------------------------------------------------
 
   /**
@@ -248,6 +296,14 @@ spa.shell = ( function () {
       .on( 'resize', onResize )
       .on( 'hashchange', onHashChange )
       .trigger( 'hashchange' );
+
+    // spa-login, spa-logoutのイベントハンドラ割り当て
+    jqueryMap.$document.on( 'spa-login', onLogin );
+    jqueryMap.$document.on( 'spa-logout', onLogin );
+
+    jqueryMap.$acct
+      .text( 'Please sign-in.' )
+      .on( 'utap', onTapAcct );
   };
 
   return {
