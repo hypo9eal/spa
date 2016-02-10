@@ -8,7 +8,17 @@
 spa.fake = ( function () {
   'use strict';
 
-  var getPeopleList;
+  var getPeopleList, fakeIdSerial, makeFakeId, mockSio;
+
+  fakeIdSerial = 5;
+
+  /**
+   * フェイクのユーザーIDを生成する
+   * @return {String} ユーザーID
+   */
+  makeFakeId = function () {
+    return 'id_' + String( fakeIdSerial++ );
+  };
 
   getPeopleList = function () {
     return [
@@ -51,7 +61,50 @@ spa.fake = ( function () {
     ];
   };
 
+  /**
+   * mockSioオブジェクト
+   * @return {Object} publicメソッドのマップ
+   */
+  mockSio = ( function () {
+    var on_sio, emit_sio, callback_map = {};
+
+    /**
+     * メッセージに対するコールバックを登録する
+     * @param  {String} msg_type メッセージ
+     * @param  {Function} callback [description]
+     */
+    on_sio = function ( msg_type, callback) {
+      callback_map[ msg_type ] = callback;
+    };
+
+    /**
+     * メッセージを発行する
+     * @param  {String} msg_type 発行するメッセージ
+     * @param  {[type]} data コールバックに渡す引数
+     * @return {[type]} [description]
+     */
+    emit_sio = function ( msg_type, data ) {
+      if ( msg_type === 'adduser' && callback_map.userupdate ) {
+        setTimeout( function () {
+          callback_map.userupdate(
+            [{
+              _id: makeFakeId(),
+              name: data.name,
+              css_map: data.css_map
+            }]
+          );
+        }, 3000 );
+      }
+    };
+
+    return {
+      emit: emit_sio,
+      on: on_sio
+    };
+  }() );
+
   return {
-    getPeopleList: getPeopleList
+    getPeopleList: getPeopleList,
+    mockSio: mockSio
   };
 }());
