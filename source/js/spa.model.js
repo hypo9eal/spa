@@ -1,6 +1,8 @@
 /**
  * spa.model.js
  * - spa.modelの定義（モデル）
+ * - personオブジェクトの定義
+ * - peopleオブジェクトの定義
  */
 
 /* eslint-env jquery */
