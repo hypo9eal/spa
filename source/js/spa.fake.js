@@ -64,13 +64,13 @@ spa.fake = ( function () {
    * @return {Object} publicメソッドのマップ
    */
   mockSio = ( function () {
-    var on_sio, emit_sio,
+    var on_sio, emit_sio, emit_mock_msg,
       send_listchange, listchange_idto,
       callback_map = {};
 
     /**
-     * メッセージに対するコールバックを登録する
-     * @param  {String} msg_type メッセージ
+     * イベントに対するコールバックを登録する
+     * @param  {String} msg_type イベント
      * @param  {Function} callback [description]
      */
     on_sio = function ( msg_type, callback) {
@@ -78,15 +78,19 @@ spa.fake = ( function () {
     };
 
     /**
-     * メッセージを発行する
-     * - adduserメッセージの場合はユーザーを追加する
-     * @param  {String} msg_type 発行するメッセージ
-     * @param  {[type]} data コールバックに渡す引数
-     * @return {[type]} [description]
+     * 各種イベントへ応答する
+     * @param  {String} msg_type 発行されたイベント
+     * @param  {[type]} data イベント発行時に渡された引数
      */
     emit_sio = function ( msg_type, data ) {
       var person_map;
 
+      /**
+       * ユーザーがログインすると発行されるイベント
+       * - 新規IDでログインユーザーを作成する
+       * - ユーザーリストにログインユーザーを追加する
+       * - userupdateのコールバックを実行する
+       */
       if ( msg_type === 'adduser' && callback_map.userupdate ) {
         setTimeout( function () {
           person_map = {
@@ -98,16 +102,69 @@ spa.fake = ( function () {
           callback_map.userupdate( [ person_map ] );
         }, 3000 );
       }
+
+      /**
+       * チャットでメッセージが送信すると発行されるイベント
+       * - チャットメッセージのデータを作成する
+       * - updatechatのコールバックを実行する
+       */
+      if ( msg_type === 'updatechat' && callback_map.updatechat ) {
+        setTimeout( function () {
+          var user = spa.model.people.get_user();
+          callback_map.updatechat( [{
+            dest_id: user.id,
+            dest_name: user.name,
+            sender_id: data.dest_id,
+            msg_text: 'Thanks for the note, ' + user.name
+          }] );
+        }, 2000);
+      }
+
+      /**
+       * チャットを離脱すると発行されるイベント
+       * - 各種コールバックの設定を削除する
+       */
+      if ( msg_type === 'leavechat' ) {
+        delete callback_map.listchange;
+        delete callback_map.updatechat;
+
+        if ( listchange_idto ) {
+          clearTimeout( listchange_idto );
+          listchange_idto = undefined;
+        }
+        send_listchange();
+      }
     };
 
     /**
-     * [send_listchange description]
+     * 他のユーザーからのメッセージを模倣する
+     * @return {[type]} [description]
+     */
+    emit_mock_msg = function () {
+      setTimeout( function () {
+        var user = spa.model.people.get_user();
+        if ( callback_map.updatechat ) {
+          callback_map.updatechat( [{
+            dest_id: user.id,
+            dest_name: user.name,
+            sender_id: 'id_04',
+            msg_text: 'Hi there ' + user.name + '! Wilma here.'
+          }] );
+        } else {
+          emit_mock_msg();
+        }
+      }, 8000);
+    };
+
+    /**
+     * DBが更新されたことを模倣する
      * @return {[type]} [description]
      */
     send_listchange = function () {
       listchange_idto = setTimeout( function () {
         if( callback_map.listchange ) {
           callback_map.listchange( [ peopleList ] );
+          emit_mock_msg();
           listchange_idto = undefined;
         } else {
           send_listchange();
@@ -121,7 +178,7 @@ spa.fake = ( function () {
       emit: emit_sio,
       on: on_sio
     };
-  }() );
+  }());
 
   return {
     mockSio: mockSio
