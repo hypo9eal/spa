@@ -93,7 +93,7 @@ spa.shell = ( function () {
   /**
    * URIアンカーを変更する
    * @param  {Object} arg_map 変更後のURIアンカーの値を示すオブジェクト
-   * @return {Bool} URIアンカーの変更の成否
+   * @return {Boolean} URIアンカーの変更の成否
    */
   changeAnchorPart = function ( arg_map ) {
     var
@@ -137,8 +137,7 @@ spa.shell = ( function () {
 
   /**
    * URIアンカーを解析し、chatコンテナを開閉する
-   * @param  {Object} event [description]
-   * @return {Bool} [description]
+   * @param  {Object} event イベントオブジェクト
    */
   onHashChange = function ( event ) {
     var
@@ -187,14 +186,12 @@ spa.shell = ( function () {
         $.uriAnchor.setAnchor( anchor_map_proposed, null, true );
       }
     }
-
-    return false;
   };
 
   /**
    * chatに関するURIアンカーの値を引数にchangeAnchorPartを実行する
    * @param {String} position_type chatコンテナの開閉状態
-   * @return {Bool} アンカーが正しく更新されたか否か
+   * @return {Boolean} アンカーが正しく更新されたか否か
    */
   setChatAnchor = function ( position_type ) {
     return changeAnchorPart( { chat : position_type } );
@@ -203,7 +200,7 @@ spa.shell = ( function () {
   /**
    * handleResizeを実行するタイマーを実行する
    * - タイマーIDがあればスキップする。なければ新しいタイマーを実行する
-   * @return {Bool} [description]
+   * @return {Boolean} [description]
    */
   onResize = function () {
     if ( stateMap.resize_idto ) { return true; }
@@ -221,7 +218,7 @@ spa.shell = ( function () {
 
   /**
    * ログインプロンプトを表示し、ログイン処理を実行する
-   * @param  {Object} event [description]
+   * @param  {Object} event イベントオブジェクト
    */
   onTapAcct = function ( event ) {
     var
@@ -242,7 +239,7 @@ spa.shell = ( function () {
 
   /**
    * ログインユーザー名を表示する
-   * @param  {Object} event [description]
+   * @param  {Object} event イベントオブジェクト
    * @param  {Object} login_user ログインしたユーザーのオブジェクト
    */
   onLogin = function ( event, login_user ) {
@@ -251,7 +248,7 @@ spa.shell = ( function () {
 
   /**
    * ログインを促すメッセージを表示する
-   * @param  {Object} event [description]
+   * @param  {Object} event イベントオブジェクト
    * @param  {Object} logout_user ログアウトしたユーザーのオブジェクト
    */
   onLogout = function ( event, logout_user ) {

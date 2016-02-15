@@ -8,7 +8,7 @@
 
 /* eslint-env jquery, browser */
 /* eslint no-console: 1 */
-/* global TAFFY:false */
+/* global TAFFY: false */
 
 spa.model = ( function () {
   'use strict';
@@ -29,7 +29,7 @@ spa.model = ( function () {
      * @type {Number} cid_serial cidのシリアルナンバーの現在地
      * @type {Object} people_cid_map cidをkeyとしたpersonオブジェクトのコレクション
      * @type {Object} people_db DBオブジェクト
-     * @type {Bool} is_connected ユーザが現在チャットに参加中か否か
+     * @type {Boolean} is_connected ユーザが現在チャットに参加中か否か
      */
     stateMap = {
       user: null,
@@ -102,7 +102,7 @@ spa.model = ( function () {
    * - ログインしたユーザー情報を現在のユーザーとして保存する
    * - チャットに参加する
    * - 完了時にspa-loginイベントを発行する
-   * @param  {[type]} user_list [description]
+   * @param  {Array} user_list ログインしたユーザマップの配列
    */
   completeLogin = function ( user_list ) {
     var user_map = user_list[ 0 ];
@@ -157,7 +157,7 @@ spa.model = ( function () {
    * - personをperson_dbから削除する
    * - personをpeople_cid_mapから削除する
    * @param  {Object} person 削除対象のpersonオブジェクト
-   * @return {Bool} 削除が実行されたか否か
+   * @return {Boolean} 削除が実行されたか否か
    */
   removePerson = function ( person ) {
     if ( ! person || person.id === configMap.anon_id ) {
@@ -260,7 +260,7 @@ spa.model = ( function () {
      * - 現在のユーザーをユーザーリストから削除する
      * - 現在のユーザーを匿名ユーザーに変更する
      * - spa-logoutイベントを発行する
-     * @return {Bool} ユーザーが削除されたか否か
+     * @return {Boolean} ユーザーが削除されたか否か
      */
     logout = function () {
       var
@@ -343,7 +343,7 @@ spa.model = ( function () {
      * public チャットに参加する
      * - 匿名ユーザーを除外する
      * - DBのlistchangeイベントにイベントハンドラを割りあてる
-     * @return {Bool} 参加したか否か
+     * @return {Boolean} 参加したか否か
      */
     join_chat = function () {
       var sio;
@@ -389,7 +389,7 @@ spa.model = ( function () {
      * - チャット相手が不在なら、chateeをnullにする
      * - spa-setchateeイベントを発行する
      * @param {String} person_id チャット相手のid
-     * @return {Bool} チャット相手が変更されたか否か
+     * @return {Boolean} チャット相手が変更されたか否か
      */
     set_chatee = function ( person_id ) {
       var new_chatee;
@@ -419,7 +419,7 @@ spa.model = ( function () {
      * - spa-updatechatイベントを発行する
      * - DBのupdatechatメッセージを発行させる
      * @param  {String} msg_text 送信するメッセージ
-     * @return {[type]} 送信が成功したか否か
+     * @return {Boolean} 送信が成功したか否か
      */
     send_msg = function ( msg_text ) {
       var
@@ -492,7 +492,7 @@ spa.model = ( function () {
 
     /**
      * _update_listを実行し、spa-listchangeイベントを発行する
-     * @param  {Array} arg_list [description]
+     * @param  {Array} arg_list オンラインなユーザーの配列
      */
     _publish_listchange = function ( arg_list ) {
       _update_list( arg_list );
@@ -501,7 +501,7 @@ spa.model = ( function () {
 
     /**
      * チャット相手を設定し、spa-updatechatイベントを発行する
-     * @param  {[type]} arg_list [description]
+     * @param  {Array} arg_list 送信メッセージオブジェクトの配列
      */
     _publish_updatechat = function ( arg_list ) {
       var msg_map = arg_list[ 0 ];

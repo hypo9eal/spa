@@ -48,8 +48,8 @@ spa.util_b = ( function () {
   /**
    * 文字列をHTMLエンコードする
    * @param  {String} input_arg_str [description]
-   * @param  {Bool} exclude_amp [description]
-   * @return {[type]} [description]
+   * @param  {Boolean} exclude_amp [description]
+   * @return {Strings} エンコードした文字列
    */
   encodeHtml = function ( input_arg_str, exclude_amp ) {
     var

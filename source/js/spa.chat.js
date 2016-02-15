@@ -158,7 +158,7 @@ spa.chat = ( function () {
    * public chatコンテナを開閉する
    * @param {String} position_type 開閉状態を指定する
    * @param {Function} callback
-   * @return {Bool} 指定した位置に移動したか否か
+   * @return {Boolean} 指定した位置に移動したか否か
    */
   setSliderPosition = function ( position_type, callback ) {
     var
@@ -212,7 +212,7 @@ spa.chat = ( function () {
 
   /**
    * public chatコンテナと付随する各種キャッシュを削除する
-   * @return {Bool} [description]
+   * @return {Boolean} 削除したか否か
    */
   removeSlider = function () {
     if ( jqueryMap.$slider ) {
@@ -230,7 +230,7 @@ spa.chat = ( function () {
   };
   /**
    * public chatコンテナの高さを調整する
-   * @return {[type]} [description]
+   * @return {Boolean} 高さを調整したか否か
    */
   handleResize = function () {
     if ( ! jqueryMap.$slider ) { return false; }
@@ -250,7 +250,7 @@ spa.chat = ( function () {
 
   /**
    * private
-   * @param  {[type]} event [description]
+   * @param  {Object} event イベントオブジェクト
    */
   onClickToggle = function ( event ) {
     var set_chat_anchor = configMap.set_chat_anchor;
