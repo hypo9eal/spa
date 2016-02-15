@@ -103,7 +103,6 @@ spa.model = ( function () {
    * - チャットに参加する
    * - 完了時にspa-loginイベントを発行する
    * @param  {[type]} user_list [description]
-   * @return {[type]} [description]
    */
   completeLogin = function ( user_list ) {
     var user_map = user_list[ 0 ];
@@ -390,6 +389,7 @@ spa.model = ( function () {
      * - チャット相手が不在なら、chateeをnullにする
      * - spa-setchateeイベントを発行する
      * @param {String} person_id チャット相手のid
+     * @return {Bool} チャット相手が変更されたか否か
      */
     set_chatee = function ( person_id ) {
       var new_chatee;
@@ -450,7 +450,6 @@ spa.model = ( function () {
      * - チャット相手がオフラインになったらチャット相手から解除する
      * - DBのユーザーリストをnameでソートする
      * @param  {Array} arg_list 引数のリスト
-     * @return {[type]} [description]
      */
     _update_list = function ( arg_list ) {
       var
@@ -494,7 +493,6 @@ spa.model = ( function () {
     /**
      * _update_listを実行し、spa-listchangeイベントを発行する
      * @param  {Array} arg_list [description]
-     * @return {[type]} [description]
      */
     _publish_listchange = function ( arg_list ) {
       _update_list( arg_list );
@@ -504,7 +502,6 @@ spa.model = ( function () {
     /**
      * チャット相手を設定し、spa-updatechatイベントを発行する
      * @param  {[type]} arg_list [description]
-     * @return {[type]} [description]
      */
     _publish_updatechat = function ( arg_list ) {
       var msg_map = arg_list[ 0 ];
@@ -538,7 +535,6 @@ spa.model = ( function () {
    * public モジュールの初期化をする
    * - 匿名ユーザーを作成して現在のユーザーとする
    * - DBからユーザーリストを取得する
-   * @return {[type]} [description]
    */
   initModule = function () {
     stateMap.anon_user = makePerson({

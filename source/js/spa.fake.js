@@ -61,7 +61,6 @@ spa.fake = ( function () {
 
   /**
    * mockSioオブジェクト
-   * @return {Object} publicメソッドのマップ
    */
   mockSio = ( function () {
     var on_sio, emit_sio, emit_mock_msg,
@@ -138,7 +137,6 @@ spa.fake = ( function () {
 
     /**
      * 他のユーザーからのメッセージを模倣する
-     * @return {[type]} [description]
      */
     emit_mock_msg = function () {
       setTimeout( function () {
@@ -158,7 +156,6 @@ spa.fake = ( function () {
 
     /**
      * DBが更新されたことを模倣する
-     * @return {[type]} [description]
      */
     send_listchange = function () {
       listchange_idto = setTimeout( function () {
