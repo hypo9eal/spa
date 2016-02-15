@@ -10,6 +10,8 @@
 /* eslint no-console: 1 */
 /* global TAFFY: false */
 
+// 未修正6.3.4
+
 spa.model = ( function () {
   'use strict';
 
@@ -185,7 +187,7 @@ spa.model = ( function () {
    * 	personオブジェクトをcidで取得する
    *
    * get_db()
-   * 	DBからユーザーリストオブジェクトを取得する
+   * 	バックエンドからユーザーリストオブジェクトを取得する
    *
    * get_user()
    * 	現在のユーザーを取得する
@@ -214,7 +216,7 @@ spa.model = ( function () {
     };
 
     /**
-     * public DBからユーザーリストオブジェクトを取得する
+     * public バックエンドからユーザーリストオブジェクトを取得する
      * @return {Object} [description]
      */
     get_db = function () {
@@ -232,8 +234,8 @@ spa.model = ( function () {
     /**
      * public ログインする
      * - ログインするユーザーを作成する
-     * - DBのuserupdateイベントにコールバックを割りあてる
-     * - DBのadduserイベントを発行する
+     * - バックエンドのuserupdateイベントにコールバックを割りあてる
+     * - バックエンドのadduserイベントを発行する
      * @param  {String} name ログインするユーザー名
      */
     login = function ( name ) {
@@ -311,6 +313,9 @@ spa.model = ( function () {
    * send_msg( msg_text )
    * 	メッセージを送信する
    *
+   * update_avatar( avatar_update_map )
+   * 	更新されたユーザー情報をバックエンドに送信する
+   *
    * _update_list( arg_list )
    * 	ユーザーリストを更新し、チャット相手のオンライン状態を確認する
    *
@@ -336,13 +341,13 @@ spa.model = ( function () {
     var
       _publish_listchange, _publish_updatechat,
       _update_list, leave_chat,
-      get_chatee, join_chat, send_msg, set_chatee,
+      get_chatee, join_chat, send_msg, set_chatee, update_avatar,
       chatee = null;
 
     /**
      * public チャットに参加する
      * - 匿名ユーザーを除外する
-     * - DBのlistchangeイベントにイベントハンドラを割りあてる
+     * - バックエンドのlistchangeイベントにイベントハンドラを割りあてる
      * @return {Boolean} 参加したか否か
      */
     join_chat = function () {
@@ -417,7 +422,7 @@ spa.model = ( function () {
      * - ログイン状態で、かつチャット相手がいる状態でない場合は失敗する
      * - メッセージのオブジェクトを作成する
      * - spa-updatechatイベントを発行する
-     * - DBのupdatechatメッセージを発行させる
+     * - バックエンドのupdatechatメッセージを発行させる
      * @param  {String} msg_text 送信するメッセージ
      * @return {Boolean} 送信が成功したか否か
      */
@@ -448,7 +453,7 @@ spa.model = ( function () {
      * - 新しいユーザーリストでmakePersonを実行するする
      * - チャット相手のオンライン状態を管理にする
      * - チャット相手がオフラインになったらチャット相手から解除する
-     * - DBのユーザーリストをnameでソートする
+     * - バックエンドのユーザーリストをnameでソートする
      * @param  {Array} arg_list 引数のリスト
      */
     _update_list = function ( arg_list ) {
@@ -520,12 +525,25 @@ spa.model = ( function () {
       jqueryMap.$document.trigger( 'spa-updatechat', [ msg_map ] );
     };
 
+    /**
+     * public アバター機能で更新されたユーザー情報をバックエンドに送信する
+     * - バックエンドのupdateavatarイベントを発行する
+     * @param  {Object} avatar_update_map 更新されたユーザー情報
+     */
+    update_avatar = function ( avatar_update_map ) {
+      var sio = isFakeData ? spa.fake.mockSio : spa.data.getSio();
+      if ( sio ) {
+        sio.emit( 'updateavatar', avatar_update_map );
+      }
+    };
+
     return {
       leave: leave_chat,
       get_chatee: get_chatee,
       join: join_chat,
       send_msg: send_msg,
-      set_chatee: set_chatee
+      set_chatee: set_chatee,
+      update_avatar: update_avatar
     };
   }());
 
@@ -534,7 +552,7 @@ spa.model = ( function () {
   /**
    * public モジュールの初期化をする
    * - 匿名ユーザーを作成して現在のユーザーとする
-   * - DBからユーザーリストを取得する
+   * - バックエンドからユーザーリストを取得する
    */
   initModule = function () {
     stateMap.anon_user = makePerson({
