@@ -252,6 +252,7 @@ spa.shell = ( function () {
    * @param  {Object} logout_user ログアウトしたユーザーのオブジェクト
    */
   onLogout = function ( event, logout_user ) {
+    console.log('onLogout');
     jqueryMap.$acct.text( 'Please sign-in.' );
   };
 
@@ -283,8 +284,8 @@ spa.shell = ( function () {
     // chatモジュールを設定して初期化
     spa.chat.configModule({
       set_chat_anchor: setChatAnchor,
-      chat_model: spa.model/*.chat*/,
-      people_model: spa.model/*.people*/
+      chat_model: spa.model.chat,
+      people_model: spa.model.people
     });
     spa.chat.initModule( jqueryMap.$container );
 
