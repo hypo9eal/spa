@@ -46,8 +46,8 @@ spa.avtr = ( function () {
   // ユーティリティメソッド 開始 ---------------------------------------------------
 
   /**
-   * [getRandRgb description]
-   * @return {[type]} [description]
+   * RGB値をランダムで返す
+   * @return {String} RGB値
    */
   getRandRgb = function () {
     var i, rgb_list = [];
@@ -72,9 +72,8 @@ spa.avtr = ( function () {
   };
 
   /**
-   * [updateAvatar description]
-   * @param  {[type]} $target [description]
-   * @return {[type]} [description]
+   * アバターのCSS情報をバックエンドに更新する
+   * @param  {Objet} $target アバターのjQueryオブジェクト
    */
   updateAvatar = function ( $target ) {
     var css_map, person_id;
@@ -97,9 +96,8 @@ spa.avtr = ( function () {
   // イベントハンドラ 開始 --------------------------------------------------------
 
   /**
-   * [onTapNav description]
-   * @param  {[type]} event [description]
-   * @return {[type]} [description]
+   * アバターのタップのイベントハンドラ
+   * @param  {Object]} event イベントオブジェクト
    */
   onTapNav = function ( event ) {
     var
@@ -114,9 +112,8 @@ spa.avtr = ( function () {
   };
 
   /**
-   * [onHeldstartNav description]
-   * @param  {[type]} event [description]
-   * @return {[type]} [description]
+   * アバターのtouchstartのイベントハンドラ
+   * @param  {Object]} event イベントオブジェクト
    */
   onHeldstartNav = function ( event ) {
     var
@@ -142,9 +139,8 @@ spa.avtr = ( function () {
   };
 
   /**
-   * [onHeldmoveNav description]
-   * @param  {[type]} event [description]
-   * @return {[type]} [description]
+   * アバターのtouchmoveのイベントハンドラ
+   * @param  {Object]} event イベントオブジェクト
    */
   onHeldmoveNav = function ( event ) {
     var drag_map = stateMap.drag_map;
@@ -161,9 +157,8 @@ spa.avtr = ( function () {
   };
 
   /**
-   * [onHeldendNav description]
-   * @param  {[type]} event [description]
-   * @return {[type]} [description]
+   * アバターのtouchendのイベントハンドラ
+   * @param  {Object} event イベントオブジェクト
    */
   onHeldendNav = function ( event ) {
     var $drag_target = stateMap.$drag_target;
@@ -181,10 +176,9 @@ spa.avtr = ( function () {
   };
 
   /**
-   * [onSetchatee description]
-   * @param  {[type]} event [description]
-   * @param  {[type]} arg_map [description]
-   * @return {[type]} [description]
+   * spa-setchateeのイベントハンドラ
+   * @param  {Object} event イベントオブジェクト
+   * @param  {Object} arg_map チャット相手情報のオブジェクト
    */
   onSetchatee = function ( event, arg_map ) {
     var
@@ -206,13 +200,11 @@ spa.avtr = ( function () {
   };
 
   /**
-   * [onListchange description]
-   * @param  {[type]} event [description]
-   * @return {[type]} [description]
+   * spa-listchangeのイベントハンドラ
+   * @param  {Object} event イベントオブジェクト
    */
   onListchange = function ( event ) {
     var
-      html = String(),
       $nav = jqueryMap.$container,
       people_db = configMap.people_model.get_db(),
       user = configMap.people_model.get_user(),
@@ -246,8 +238,7 @@ spa.avtr = ( function () {
   };
 
   /**
-   * [onLogout description]
-   * @return {[type]} [description]
+   * spa-logoutのイベントハンドラ
    */
   onLogout = function () {
     jqueryMap.$container.empty();
