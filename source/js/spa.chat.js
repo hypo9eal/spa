@@ -344,7 +344,6 @@ spa.chat = ( function () {
    * - メッセージを送信する
    * - フォーム部品にリアクションさせる
    * @param  {[type]} event イベントオブジェクト
-   * @return {[type]} [description
    */
   onSubmitMsg = function ( event ) {
     var msg_text = jqueryMap.$input.val();
