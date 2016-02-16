@@ -115,7 +115,7 @@ spa.chat = ( function () {
   // DOM関連メソッド 開始 --------------------------------------------------------
 
   /**
-   * private jQuryオブジェクトをキャッシュする
+   * jQuryオブジェクトをキャッシュする
    */
   setJqueryMap = function () {
     var
@@ -140,7 +140,6 @@ spa.chat = ( function () {
   };
 
   /**
-   * private
    * - chatコンテナのfont-sizeを元に各種設定値のem->px変換をする
    * - chatコンテナの高さを設定する
    */
@@ -323,7 +322,6 @@ spa.chat = ( function () {
   // イベントハンドラ 開始 --------------------------------------------------------
 
   /**
-   * private
    * @param  {Object} event イベントオブジェクト
    */
   onTapToggle = function ( event ) {
