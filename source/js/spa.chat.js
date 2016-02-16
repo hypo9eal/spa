@@ -25,8 +25,8 @@ spa.chat = ( function () {
      * @type {String} window_height_min_em windowの最小高さ(em)
      * @type {String} slider_opened_title chatコンテナの開閉後のtitle属性値
      * @type {String} slider_closed_title
-     * @type {String} chat_model chatモデルとのやりとりに使用するオブジェクト
-     * @type {String} people_model peopleモデルとのやりとりに使用するオブジェクト
+     * @type {String} chat_model モデルのchatオブジェクト
+     * @type {String} people_model モデルのpeopleオブジェクト
      * @type {Function} set_chat_anchor shellから受け取ったsetChatAnchorメソッド
      */
     configMap = {
@@ -180,7 +180,7 @@ spa.chat = ( function () {
     }
 
     // chatコンテナが既に指定した位置にある場合
-    if (stateMap.position_type === position_type ) {
+    if ( stateMap.position_type === position_type ) {
       // それがopenの場合
       if ( position_type === 'opened' ) {
         jqueryMap.$input.focus();
