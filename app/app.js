@@ -49,7 +49,7 @@ auth = function ( req, res, next ) {
 
   unauthorized = function ( res ) {
     res.set( 'WWW-Authenticate', 'Basic realm=Authorization required.' );
-    return res.send( 401 );
+    return res.sendStatus( 401 );
   };
 
   user = basicAuth( req );
