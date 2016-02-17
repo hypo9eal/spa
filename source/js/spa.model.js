@@ -49,7 +49,7 @@ spa.model = ( function () {
     /**
      * @type {Boolean} フェイクデータを使用するか否か
      */
-    isFakeData = true,
+    isFakeData = false,
 
     personProto, makeCid, clearPeopleDb, completeLogin,
     makePerson, removePerson, people, chat, initModule;
