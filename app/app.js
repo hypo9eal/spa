@@ -14,12 +14,15 @@ var
   bodyParser = require( 'body-parser' ),
   methodOverride = require( 'method-override' ),
   errorhandler = require( 'errorhandler' ),
+  routes = require( './routes' ),
   app = express(),
   server = http.createServer( app ),
   env = process.env.NODE_ENV || 'development';
 
+// サーバ構成 開始 ---------------------------------------------------------------
+
 app.use( bodyParser.json() );
-app.use( methodOverride('X-HTTP-Method-Override') );
+app.use( methodOverride( 'X-HTTP-Method-Override' ) );
 app.use( express.static( __dirname + '/build' ) );
 
 switch ( env ) {
@@ -37,9 +40,9 @@ switch ( env ) {
     break;
 }
 
-app.get( '/', function ( request, response ) {
-  response.redirect( '/spa.html' );
-});
+routes.configRoutes( app, server );
+
+// サーバ構成 終了 ---------------------------------------------------------------
 
 server.listen( 4000 );
 console.log(

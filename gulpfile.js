@@ -87,14 +87,7 @@ gulp.task( 'node', function () {
     env: {
       'NODE_ENV': 'development'
     },
-    stdout: false
-  } ).on( 'readable', function () {
-    this.stdout.on( 'data', function ( chunk ) {
-      process.stdout.write( chunk );
-    } );
-    this.stderr.on( 'data', function ( chunk ) {
-      process.stderr.write( chunk );
-    } );
+    stdout: true
   });
 });
 
