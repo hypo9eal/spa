@@ -20,6 +20,10 @@
  * basics
  */
 
+* {
+  user-select: none;
+}
+
 body {
   font: 13px 'Trebuchet MS', Valdana, Helvetica, Arial, sans-serif;
   color: $dark-gray;
@@ -49,6 +53,12 @@ ul::after {
   display: block;
   clear: both;
   content: '';
+}
+
+input,
+textarea,
+.spa-x-user-select {
+  user-select: text;
 }
 
 /**

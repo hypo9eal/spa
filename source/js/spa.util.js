@@ -1,6 +1,6 @@
 /**
  * spa.util.js
- * - spa.utilの定義（汎用メソッド）
+ * - spa.utilの定義（基本ユーティリティモジュール）
  */
 
 spa.util = ( function () {
@@ -10,8 +10,8 @@ spa.util = ( function () {
    * Errorオブジェクトを生成する
    * @param  {String} name_text エラー名
    * @param  {String} msg_text エラーメッセージ
-   * @param  {[Error]} data Errorオブジェクト
-   * @return {[Error]} [description]
+   * @param  {Error} data Errorオブジェクト
+   * @return {Error} 生成したErrorオブジェクト
    */
   makeError = function ( name_text, msg_text, data ) {
     var error = new Error();

@@ -19,7 +19,8 @@ gulp.task( 'css', function () {
   return gulp.src([
     src + '/css/spa.scss',
     src + '/css/spa.shell.scss',
-    src + '/css/spa.chat.scss'
+    src + '/css/spa.chat.scss',
+    src + '/css/spa.avtr.scss'
   ])
   .pipe( plumber() )
   .pipe( sourcemaps.init() )
@@ -37,9 +38,13 @@ gulp.task( 'js', function () {
   return gulp.src([
     src + '/js/spa.js',
     src + '/js/spa.util.js',
+    src + '/js/spa.data.js',
+    src + '/js/spa.fake.js',
     src + '/js/spa.model.js',
+    src + '/js/spa.util_b.js',
     src + '/js/spa.shell.js',
-    src + '/js/spa.chat.js'
+    src + '/js/spa.chat.js',
+    src + '/js/spa.avtr.js'
   ])
   .pipe( plumber() )
   .pipe( sourcemaps.init() )

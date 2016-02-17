@@ -4,7 +4,11 @@
  * - spaの初期化
  */
 
+/* eslint-env browser, jquery */
+
 var spa = ( function ( $ ) {
+  'use strict';
+
   var initModule;
 
   /**
@@ -13,6 +17,8 @@ var spa = ( function ( $ ) {
    * @param  {Object} $container spaコンテナのjQueryObject
    */
   initModule = function ( $container ) {
+    spa.data.initModule();
+    spa.model.initModule();
     spa.shell.initModule( $container );
   };
 
