@@ -14,7 +14,7 @@ var
   nodemon = require( 'gulp-nodemon' ),
 
   src = 'source',
-  dst = 'app/build';
+  dst = 'app/public';
 
 // task "css"
 gulp.task( 'css', function () {

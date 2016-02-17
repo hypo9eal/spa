@@ -25,7 +25,7 @@ var
 
 app.use( bodyParser.json() );
 app.use( methodOverride( 'X-HTTP-Method-Override' ) );
-app.use( express.static( __dirname + '/build' ) );
+app.use( express.static( __dirname + '/public' ) );
 
 switch ( env ) {
   case 'development':
