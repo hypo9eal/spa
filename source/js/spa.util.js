@@ -4,6 +4,8 @@
  */
 
 spa.util = ( function () {
+  'use strict';
+  
   var makeError, setConfigMap;
 
   /**
