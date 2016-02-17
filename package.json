@@ -4,6 +4,11 @@
   "description": "desc",
   "main": "index.js",
   "dependencies": {
+    "body-parser": "^1.15.0",
+    "errorhandler": "^1.4.3",
+    "express": "^4.13.4",
+    "method-override": "^2.3.5",
+    "morgan": "^1.6.1",
     "normalize.css": "^3.0.3"
   },
   "devDependencies": {
@@ -15,6 +20,7 @@
     "gulp-concat": "^2.6.0",
     "gulp-cssnano": "^2.1.0",
     "gulp-hologram": "^1.2.0",
+    "gulp-nodemon": "^2.0.6",
     "gulp-plumber": "^1.0.1",
     "gulp-sass": "^2.1.1",
     "gulp-sourcemaps": "^1.6.0",

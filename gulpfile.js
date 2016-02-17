@@ -1,18 +1,20 @@
 'use strict';
 
-var gulp = require( 'gulp' );
-var sass = require( 'gulp-sass' );
-var browserSync = require( 'browser-sync' ).create();
-var autoprefixer = require( 'gulp-autoprefixer' );
-var sourcemaps = require( 'gulp-sourcemaps' );
-var cssnano = require( 'gulp-cssnano' );
-var hologram = require( 'gulp-hologram' );
-var uglify = require( 'gulp-uglify' );
-var plumber = require( 'gulp-plumber' );
-var concat = require( 'gulp-concat' );
+var
+  gulp = require( 'gulp' ),
+  sass = require( 'gulp-sass' ),
+  browserSync = require( 'browser-sync' ).create(),
+  autoprefixer = require( 'gulp-autoprefixer' ),
+  sourcemaps = require( 'gulp-sourcemaps' ),
+  cssnano = require( 'gulp-cssnano' ),
+  hologram = require( 'gulp-hologram' ),
+  uglify = require( 'gulp-uglify' ),
+  plumber = require( 'gulp-plumber' ),
+  concat = require( 'gulp-concat' ),
+  nodemon = require( 'gulp-nodemon' ),
 
-var src = 'source';
-var dst = 'build';
+  src = 'source',
+  dst = 'app/build';
 
 // task "css"
 gulp.task( 'css', function () {
@@ -76,13 +78,33 @@ gulp.task( 'copy', function () {
   .pipe( browserSync.stream() );
 });
 
-// task "watch"
-gulp.task( 'watch', function () {
-  browserSync.init({
-    server: {
-      baseDir: dst
-    }
+// task "node"
+gulp.task( 'node', function () {
+  return nodemon( {
+    script: 'app/app.js',
+    ext: 'js css html',
+    ignore: [],
+    env: {
+      'NODE_ENV': 'development'
+    },
+    stdout: false
+  } ).on( 'readable', function () {
+    this.stdout.on( 'data', function ( chunk ) {
+      process.stdout.write( chunk );
+    } );
+    this.stderr.on( 'data', function ( chunk ) {
+      process.stderr.write( chunk );
+    } );
   });
+});
+
+// task "watch"
+gulp.task( 'watch', [ 'node' ], function () {
+  browserSync.init( {
+    proxy: 'http://localhost:4000',
+    port: 3000,
+    open: true
+  } );
 
   gulp.watch( ['hologram/**/*'], ['hologram'] );
   gulp.watch( [src + '/**/*.scss'], ['css', 'hologram'] );
