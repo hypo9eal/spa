@@ -14,10 +14,12 @@ var
   bodyParser = require( 'body-parser' ),
   methodOverride = require( 'method-override' ),
   errorhandler = require( 'errorhandler' ),
+  basicAuth = require( 'basic-auth' ),
   routes = require( './routes' ),
   app = express(),
   server = http.createServer( app ),
-  env = process.env.NODE_ENV || 'development';
+  env = process.env.NODE_ENV || 'development',
+  auth;
 
 // サーバ構成 開始 ---------------------------------------------------------------
 
@@ -40,7 +42,30 @@ switch ( env ) {
     break;
 }
 
-routes.configRoutes( app, server );
+auth = function ( req, res, next ) {
+  var
+    unauthorized,
+    user;
+
+  unauthorized = function ( res ) {
+    res.set( 'WWW-Authenticate', 'Basic realm=Authorization required.' );
+    return res.send( 401 );
+  };
+
+  user = basicAuth( req );
+
+  if( ! user || ! user.name || ! user.pass ) {
+    return unauthorized( res );
+  }
+
+  if ( user.name === 'foo' && user.pass === 'bar' ) {
+    return next();
+  } else {
+    return unauthorized( res );
+  }
+};
+
+routes.configRoutes( app, server, auth );
 
 // サーバ構成 終了 ---------------------------------------------------------------
 

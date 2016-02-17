@@ -1,4 +1,3 @@
-
 /**
  * routes.js
  */
@@ -10,8 +9,8 @@
 
 var configRoutes;
 
-configRoutes = function ( app, server ) {
-  app.get( '/', function ( req, res ) {
+configRoutes = function ( app, server, auth ) {
+  app.get( '/*?', auth, function ( req, res ) {
     res.redirect( '/spa.html' );
   });
 
