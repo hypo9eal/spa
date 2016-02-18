@@ -3,7 +3,6 @@
  * - spa.dataの定義（データモジュール）
  */
 
-/* eslint-env node */
 /* global io: false */
 
 spa.data = ( function () {
