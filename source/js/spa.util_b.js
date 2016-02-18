@@ -59,7 +59,8 @@ spa.util_b = ( function () {
     if ( exclude_amp ) {
       lookup_map = configMap.encode_noamp_map;
       regex = configMap.regex_encode_noamp;
-    } else {
+    }
+    else {
       lookup_map = configMap.html_encode_map;
       regex = configMap.regex_encode_html;
     }

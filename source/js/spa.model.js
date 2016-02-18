@@ -404,7 +404,8 @@ spa.model = ( function () {
         if ( chatee && chatee.id === new_chatee.id ) {
           return false;
         }
-      } else {
+      }
+      else {
         new_chatee = null;
       }
 
@@ -517,7 +518,8 @@ spa.model = ( function () {
 
       // チャット相手が設定済みの場合、メッセージ送信元が自分以外で尚且つ
       // 現在のチャット相手以外であればメッセージ送信元をチャット相手とする
-      } else if ( msg_map.sender_id !== stateMap.user.id
+      }
+      else if ( msg_map.sender_id !== stateMap.user.id
         && msg_map.sender_id !== chatee.id ) {
         set_chatee( msg_map.sender_id );
       }

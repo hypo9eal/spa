@@ -114,7 +114,8 @@ spa.shell = ( function () {
 
         if ( arg_map[key_name_dep] ) {
           anchor_map_revise[key_name_dep] = arg_map[key_name_dep];
-        } else {
+        }
+        else {
           delete anchor_map_revise[key_name_dep];
           delete anchor_map_revise['_s' + key_name_dep];
         }
@@ -181,7 +182,8 @@ spa.shell = ( function () {
       if ( anchor_map_previous ) {
         $.uriAnchor.setAnchor( anchor_map_previous, null, true );
         stateMap.anchor_map = anchor_map_previous;
-      } else {
+      }
+      else {
         delete anchor_map_proposed.chat;
         $.uriAnchor.setAnchor( anchor_map_proposed, null, true );
       }
@@ -232,7 +234,8 @@ spa.shell = ( function () {
       user_name = prompt( 'Please sign-in ');
       spa.model.people.login( user_name );
       jqueryMap.$acct.text( '...processing...' );
-    } else {
+    }
+    else {
       spa.model.people.logout();
     }
   };

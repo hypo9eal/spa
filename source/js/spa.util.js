@@ -5,7 +5,7 @@
 
 spa.util = ( function () {
   'use strict';
-  
+
   var makeError, setConfigMap;
 
   /**
@@ -44,7 +44,8 @@ spa.util = ( function () {
       if ( input_map.hasOwnProperty( key_name ) ) {
         if ( settable_map.hasOwnProperty( key_name ) ) {
           config_map[key_name] = input_map[key_name];
-        } else {
+        }
+        else {
           error = makeError(
             'Bad Input',
             'Setting config key |' + key_name + '| is not supported.' );

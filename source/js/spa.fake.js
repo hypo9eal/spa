@@ -163,7 +163,8 @@ spa.fake = ( function () {
             sender_id: 'id_04',
             msg_text: 'Hi there ' + user.name + '! Wilma here.'
           }] );
-        } else {
+        }
+        else {
           emit_mock_msg();
         }
       }, 8000);
@@ -178,7 +179,8 @@ spa.fake = ( function () {
           callback_map.listchange( [ peopleList ] );
           emit_mock_msg();
           listchange_idto = undefined;
-        } else {
+        }
+        else {
           send_listchange();
         }
       }, 1000);

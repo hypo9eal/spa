@@ -60,7 +60,8 @@ auth = function ( req, res, next ) {
 
   if ( user.name === 'foo' && user.pass === 'bar' ) {
     return next();
-  } else {
+  }
+  else {
     return unauthorized( res );
   }
 };

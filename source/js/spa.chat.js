@@ -331,7 +331,8 @@ spa.chat = ( function () {
 
     if ( stateMap.position_type === 'opened' ) {
       set_chat_anchor( 'closed' );
-    } else if ( stateMap.position_type === 'closed') {
+    }
+    else if ( stateMap.position_type === 'closed') {
       set_chat_anchor( 'opened' );
     }
   };
@@ -397,7 +398,8 @@ spa.chat = ( function () {
     if ( ! new_chatee ) {
       if ( old_chatee ) {
         writeAlert( old_chatee.name + 'has left the chat' );
-      } else {
+      }
+      else {
         writeAlert( 'Your friend has left the chat');
       }
       jqueryMap.$title.text( 'Chat' );
