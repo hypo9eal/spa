@@ -10,12 +10,12 @@
 var configRoutes;
 
 configRoutes = function ( app, server, auth ) {
-  app.get( '/*?', auth, function ( req, res ) {
+  app.get( '/', auth, function ( req, res ) {
     res.redirect( '/spa.html' );
   });
 
   app.all( '/api/:obj_type/*?', function ( req, res, next ) {
-    res.contentType( 'json' );
+    res.set( 'Content-Type', 'text/json' );
     next();
   });
 
