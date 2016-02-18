@@ -8,24 +8,26 @@
 'use strict';
 
 var
-  http = require( 'http' ),
   express = require( 'express' ),
+  app = express(),
+  http = require( 'http' ).Server( app ),
+  path = require( 'path' ),
   morgan = require( 'morgan' ),
   bodyParser = require( 'body-parser' ),
   methodOverride = require( 'method-override' ),
   errorhandler = require( 'errorhandler' ),
   basicAuth = require( 'basic-auth' ),
   routes = require( './routes' ),
-  app = express(),
-  server = http.createServer( app ),
+
   env = process.env.NODE_ENV || 'development',
+  publicRoot = path.join( __dirname, 'public' ),
   auth;
 
 // サーバ構成 開始 ---------------------------------------------------------------
 
 app.use( bodyParser.json() );
 app.use( methodOverride( 'X-HTTP-Method-Override' ) );
-app.use( express.static( __dirname + '/public' ) );
+app.use( express.static( publicRoot ) );
 
 switch ( env ) {
   case 'development':
@@ -66,12 +68,12 @@ auth = function ( req, res, next ) {
   }
 };
 
-routes.configRoutes( app, server, auth );
+routes.configRoutes( app, http, auth );
 
 // サーバ構成 終了 ---------------------------------------------------------------
 
-server.listen( 4000 );
+http.listen( 4000 );
 console.log(
   'Node: Listening on port %d in %s mode',
-  server.address().port, app.settings.env
+  http.address().port, app.settings.env
 );

@@ -7,11 +7,14 @@
 
 'use strict';
 
-var configRoutes;
+var
+  path = require( 'path' ),
+  publicRoot = path.join( __dirname, 'public' ),
+  configRoutes;
 
-configRoutes = function ( app, server, auth ) {
+configRoutes = function ( app, http, auth ) {
   app.get( '/', auth, function ( req, res ) {
-    res.redirect( '/spa.html' );
+    res.sendFile( path.join( publicRoot, 'spa.html' ) );
   });
 
   app.all( '/api/:obj_type/*?', function ( req, res, next ) {
