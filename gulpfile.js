@@ -96,7 +96,7 @@ gulp.task( 'watch', [ 'node' ], function () {
   browserSync.init( {
     proxy: 'http://localhost:4000',
     port: 3000,
-    open: true
+    open: false
   } );
 
   gulp.watch( ['hologram/**/*'], ['hologram'] );
