@@ -10,24 +10,22 @@
 var
   express = require( 'express' ),
   app = express(),
-  http = require( 'http' ).Server( app ),
   path = require( 'path' ),
   morgan = require( 'morgan' ),
   bodyParser = require( 'body-parser' ),
-  methodOverride = require( 'method-override' ),
   errorhandler = require( 'errorhandler' ),
-  basicAuth = require( 'basic-auth' ),
-  routes = require( './routes' ),
 
+  router = require( './router' ),
+
+  port = process.env.PORT || 4000,
   env = process.env.NODE_ENV || 'development',
-  publicRoot = path.join( __dirname, 'public' ),
-  auth;
+  publicRoot = path.join( __dirname, 'public' );
 
 // サーバ構成 開始 ---------------------------------------------------------------
 
-app.use( bodyParser.json() );
-app.use( methodOverride( 'X-HTTP-Method-Override' ) );
 app.use( express.static( publicRoot ) );
+app.use( bodyParser.urlencoded( { extended: true } ) );
+app.use( bodyParser.json() );
 
 switch ( env ) {
   case 'development':
@@ -44,36 +42,12 @@ switch ( env ) {
     break;
 }
 
-auth = function ( req, res, next ) {
-  var
-    unauthorized,
-    user;
-
-  unauthorized = function ( res ) {
-    res.set( 'WWW-Authenticate', 'Basic realm=Authorization required.' );
-    return res.sendStatus( 401 );
-  };
-
-  user = basicAuth( req );
-
-  if( ! user || ! user.name || ! user.pass ) {
-    return unauthorized( res );
-  }
-
-  if ( user.name === 'foo' && user.pass === 'bar' ) {
-    return next();
-  }
-  else {
-    return unauthorized( res );
-  }
-};
-
-routes.configRoutes( app, http, auth );
+app.use( '/', router );
 
 // サーバ構成 終了 ---------------------------------------------------------------
 
-http.listen( 4000 );
+app.listen( port );
 console.log(
-  'Node: Listening on port %d in %s mode',
-  http.address().port, app.settings.env
+  'Node: Listening on port %s in %s mode',
+  port, app.settings.env
 );
