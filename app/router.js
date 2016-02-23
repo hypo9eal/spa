@@ -23,7 +23,7 @@ router.route( '/' )
 
 router.route( '/api/user' )
   .get( function ( req, res ) {
-    User.find( {}, function ( err, user ) {
+    User.find( function ( err, user ) {
       if ( err ) {
         res.send( err );
       }
