@@ -17,12 +17,29 @@ Schema = mongoose.Schema;
 
 UserSchema = new Schema(
   {
-    name: String,
-    is_online: Boolean,
+    name: {
+      type: String,
+      minlength: 2,
+      maxlength: 127
+    },
+    is_online: {
+      type: Boolean
+    },
     css_map: {
-      top: Number,
-      left: Number,
-      'background-color': String
+      top: {
+        type: Number,
+        required: true
+      },
+      left: {
+        type: Number,
+        required: true
+      },
+      'background-color': {
+        type: String,
+        required: true,
+        minlength: 0,
+        maxlength: 25
+      }
     }
   } );
 
