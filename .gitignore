@@ -67,3 +67,6 @@ Temporary Items
 
 # Build directory
 app/public
+
+# Database directory
+db
