@@ -15,7 +15,7 @@ var
   bodyParser = require( 'body-parser' ),
   errorhandler = require( 'errorhandler' ),
 
-  router = require( './router' ),
+  router = require( './lib/router' ),
 
   port = process.env.PORT || 4000,
   env = process.env.NODE_ENV || 'development',
