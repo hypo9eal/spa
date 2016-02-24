@@ -249,10 +249,12 @@ spa.model = ( function () {
 
       sio.on( 'userupdate', completeLogin );
 
-      sio.emit( 'adduser', {
-        cid: stateMap.user.cid,
-        css_map: stateMap.user.css_map,
-        name: stateMap.user.name
+      sio.on( 'connect', function (){
+        sio.emit( 'adduser', {
+          cid: stateMap.user.cid,
+          css_map: stateMap.user.css_map,
+          name: stateMap.user.name
+        });
       });
     };
 

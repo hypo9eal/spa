@@ -20,7 +20,7 @@ spa.data = ( function () {
    * @return {[type]} [description]
    */
   makeSio = function () {
-    var socket = io.connect( '/chat' );
+    var socket = io( '/chat' );
 
     return {
       emit: function ( event_name, data ) {

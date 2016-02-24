@@ -10,12 +10,14 @@
 var
   express = require( 'express' ),
   app = express(),
+  http = require( 'http' ).Server( app ),
   path = require( 'path' ),
   morgan = require( 'morgan' ),
   bodyParser = require( 'body-parser' ),
   errorhandler = require( 'errorhandler' ),
 
   router = require( './lib/router' ),
+  chat = require( './lib/chat' ),
 
   port = process.env.PORT || 4000,
   env = process.env.NODE_ENV || 'development',
@@ -44,9 +46,11 @@ switch ( env ) {
 
 app.use( '/', router );
 
+chat.connect( http );
+
 // サーバ構成 終了 ---------------------------------------------------------------
 
-app.listen( port );
+http.listen( port );
 console.log(
   'Node: Listening on port %s in %s mode',
   port, app.settings.env
