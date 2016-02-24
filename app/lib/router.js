@@ -11,83 +11,90 @@ var
   express = require( 'express' ),
   router = express.Router(),
   path = require( 'path' ),
+  crud = require( './crud' ),
 
-  User = require( './user' ),
-
-  publicRoot = path.join( __dirname, 'public' );
+  publicRoot = path.join( __dirname, '../', 'public' );
 
 router.route( '/' )
   .get(function ( req, res ) {
     res.sendFile( path.join( publicRoot, 'spa.html' ) );
   });
 
-router.route( '/api/user' )
-  .get( function ( req, res ) {
-    User.find( function ( err, user ) {
-      if ( err ) {
-        res.send( err );
-      }
-      res.json( user );
-    });
-  })
-
-  .post( function ( req, res ) {
-    var user = new User();
-
-    user.name = req.body.name;
-    user.is_online = req.body.is_online;
-    user.css_map = req.body.css_map;
-
-    user.save( function ( err, user ) {
-      if ( err ) {
-        res.send( err );
-      }
-      res.json( user );
-    });
+router.route( '/api/:objType*?')
+  .all( function ( req, res, next ) {
+    next();
   });
 
-router.route( '/api/user/:id([a-z0-9]+)' )
+router.route( '/api/:objType([a-z]+)' )
   .get( function ( req, res ) {
-    User.findById( req.params.id, function ( err, user ) {
-      if ( err ) {
-        res.send( err );
-      }
-      res.json( user );
-    });
-  })
-
-  .put( function ( req, res ) {
-    User.findById( req.params.id, function ( err, user ) {
-      if( err ) {
-        res.send( err );
-      }
-
-      user.name = req.body.name;
-      user.is_online = req.body.is_online;
-      user.css_map = req.body.css_map;
-
-      user.save( function ( err, user ) {
+    crud.read(
+      req.params.objType,
+      {},
+      function ( err, obj ) {
         if ( err ) {
           res.send( err );
         }
-        res.json( user );
+        res.json( obj );
       });
-    });
+  })
+
+  .post( function ( req, res ) {
+    crud.construct(
+      req.params.objType,
+      req.body,
+      function ( err, obj ) {
+        if ( err ) {
+          res.send( err );
+        }
+        res.json( obj );
+      });
+  });
+
+router.route( '/api/:objType([a-z]+)/:_id([a-z0-9]+)' )
+  .get( function ( req, res ) {
+    crud.read(
+      req.params.objType,
+      {
+        _id: req.params._id
+      },
+      function ( err, obj ) {
+        if ( err ) {
+          res.send( err );
+        }
+        res.json( obj );
+      });
+  })
+
+  .put( function ( req, res ) {
+    crud.update(
+      req.params.objType,
+      {
+        _id: req.params._id
+      },
+      req.body,
+      function ( err, obj ) {
+        if ( err ) {
+          res.send( err );
+        }
+        res.json( obj );
+      });
   })
 
   .delete( function ( req, res ) {
-    User.remove( {
-      _id: req.params.id
-    },
-    function ( err, user ) {
-      if ( err ) {
-        res.send( err );
-      }
-      res.json( {
-        message: 'Successfully deleated',
-        user: user
+    crud.destroy(
+      req.params.objType,
+      {
+        _id: req.params._id
+      },
+      function ( err, obj ) {
+        if ( err ) {
+          res.send( err );
+        }
+        res.json( {
+          message: 'Successfully deleated',
+          obj: obj
+        });
       });
-    });
   });
 
 module.exports = router;
