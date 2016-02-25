@@ -3,7 +3,7 @@
  */
 
 /* eslint-env node */
-/* eslint no-console: 0 */
+/* eslint no-console: 1 */
 
 'use strict';
 
@@ -13,7 +13,7 @@ var
 
   chatterMap = {},
 
-  emitUserList, signIn, chatObj;
+  emitUserList, signIn, signOut, chatObj;
 
 emitUserList = function ( io ) {
   crud.read(
@@ -47,6 +47,21 @@ signIn = function ( io, user_map, socket ) {
   socket.user_id = user_map._id;
 };
 
+signOut = function ( io, user_id ) {
+  crud.update(
+    'user',
+    {
+      _id: user_id
+    },
+    {
+      is_online: false
+    },
+    function ( err, result ) {
+      emitUserList( io );
+    } );
+  delete chatterMap[ user_id ];
+};
+
 chatObj = {
   connect: function ( server ) {
     var io = socket.listen( server );
@@ -55,6 +70,7 @@ chatObj = {
       // .set( 'blacklist', [] )
       .of( '/chat' )
       .on( 'connection', function ( socket ) {
+
         socket.on( 'adduser', function ( user_map ) {
           crud.read(
             'user',
@@ -91,10 +107,42 @@ chatObj = {
             }
           );
         } );
-        socket.on( 'updatechat', function () {} );
-        socket.on( 'leavechat', function () {} );
-        socket.on( 'disconnect', function () {} );
-        socket.on( 'updateavatar', function () {} );
+
+        socket.on( 'updatechat', function ( chat_map ) {
+          if ( chatterMap.hasOwnProperty( chat_map.dest_id ) ) {
+            chatterMap[ chat_map.dest_id ]
+              .emit( 'updatechat', chat_map );
+          }
+          else {
+            socket.emit( 'updatechat', {
+              sender_id: chat_map.sender_id,
+              msg_text: chat_map.dest_name + ' has gone offline.'
+            });
+          }
+        } );
+
+        socket.on( 'leavechat', function ( ) {
+          console.log( '** user %s logged out **', socket.user_id );
+          signOut( io, socket.user_id );
+        } );
+
+        socket.on( 'disconnect', function () {
+          console.log( '** user %s closed browser or tab **', socket.user_id );
+          signOut( io, socket.user_id );
+        } );
+        socket.on( 'updateavatar', function ( avtr_map ) {
+          crud.update(
+            'user',
+            {
+              _id: avtr_map.person_id
+            },
+            {
+              css_map: avtr_map.css_map
+            },
+            function ( err, result ) {
+              emitUserList( io );
+            } );
+        } );
       });
 
     return io;
