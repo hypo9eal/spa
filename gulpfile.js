@@ -82,7 +82,21 @@ gulp.task( 'copy', function () {
 gulp.task( 'node', function () {
   return nodemon( {
     script: 'app/app.js',
-    ext: 'js css html',
+    ext: 'js json',
+    ignore: [],
+    env: {
+      'NODE_ENV': 'development'
+    },
+    stdout: true
+  });
+});
+
+// task "node-inspector"
+gulp.task( 'node-inspector', function () {
+  return nodemon( {
+    script: 'app/app.js',
+    ext: 'js json',
+    exec: 'node-inspector --web-port=4000 --debug-port=5858 & node --debug',
     ignore: [],
     env: {
       'NODE_ENV': 'development'
@@ -92,7 +106,7 @@ gulp.task( 'node', function () {
 });
 
 // task "watch"
-gulp.task( 'watch', [ 'node' ], function () {
+gulp.task( 'watch', function () {
   browserSync.init( {
     proxy: 'http://localhost:4000',
     port: 3000,
@@ -109,4 +123,8 @@ gulp.task( 'watch', [ 'node' ], function () {
   ], ['copy'] );
 });
 
-gulp.task( 'default', ['copy', 'css', 'js', 'hologram', 'watch'] );
+gulp.task( 'default',
+  ['copy', 'css', 'js', 'hologram', 'node', 'watch'] );
+
+gulp.task( 'inspector',
+  ['copy', 'css', 'js', 'hologram', 'node-inspector', 'watch'] );

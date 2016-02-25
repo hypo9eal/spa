@@ -31,7 +31,8 @@
   },
   "scripts": {
     "test": "",
-    "gulp": "gulp",
+    "build": "gulp default",
+    "debug": "gulp inspector",
     "hologram": "hologram -c hologram/config.yml",
     "start": ""
   },
