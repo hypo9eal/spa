@@ -271,9 +271,11 @@ spa.model = ( function () {
         is_removed,
         user = stateMap.user;
 
-      chat._leave();
+      chat.leave();
       is_removed = removePerson( user );
       stateMap.user = stateMap.anon_user;
+
+      spa.data.removeSio();
 
       jqueryMap.$document.trigger( 'spa-logout', [ user ] );
 

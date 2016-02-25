@@ -13,7 +13,7 @@ spa.data = ( function () {
       sio: null
     },
 
-    makeSio, getSio, initModule;
+    makeSio, getSio, removeSio, initModule;
 
   /**
    * [makeSio description]
@@ -46,6 +46,17 @@ spa.data = ( function () {
   };
 
   /**
+   * [removeSio description]
+   * @return {[type]} [description]
+   */
+  removeSio = function () {
+    if ( stateMap.sio ) {
+      stateMap.sio = null;
+    }
+    return;
+  };
+
+  /**
    * [initModule description]
    * @return {[type]} [description]
    */
@@ -55,6 +66,7 @@ spa.data = ( function () {
 
   return {
     getSio: getSio,
+    removeSio: removeSio,
     initModule: initModule
   };
 }());
