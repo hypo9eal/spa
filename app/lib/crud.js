@@ -3,7 +3,7 @@
  */
 
 /* eslint-env node */
-/* eslint no-console: 0 */
+/* eslint no-console: 1 */
 
 'use strict';
 
@@ -99,6 +99,8 @@ constructObj = function ( obj_type, obj_map, callback ) {
 updateObj = function ( obj_type, find_map, update_map, callback ) {
   var
     type_check = checkType( obj_type ),
+    set_map = {},
+    prop_name,
     model;
 
   if ( type_check !== true ) {
@@ -107,19 +109,22 @@ updateObj = function ( obj_type, find_map, update_map, callback ) {
   }
 
   model = modelMap[ obj_type ];
-  model.findOne( find_map, function ( err, obj ) {
-    if( err ) {
-      callback( err );
+
+  for ( prop_name in update_map ) {
+    if ( update_map.hasOwnProperty( prop_name)
+      && update_map[ prop_name ] !== undefined ) {
+      set_map[ prop_name ] = update_map[ prop_name ];
     }
+  }
 
-    obj.name = update_map.name;
-    obj.is_online = update_map.is_online;
-    obj.css_map = update_map.css_map;
-
-    obj.save( function ( err, obj ) {
+  model.update(
+    find_map,
+    {
+      $set: set_map
+    },
+    function ( err, obj ) {
       callback ( err, obj );
     });
-  });
 };
 
 destroyObj = function ( obj_type, find_map, callback ) {
