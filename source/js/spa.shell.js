@@ -307,7 +307,7 @@ spa.shell = ( function () {
 
     // spa-login, spa-logoutのイベントハンドラ割り当て
     jqueryMap.$document.on( 'spa-login', onLogin );
-    jqueryMap.$document.on( 'spa-logout', onLogin );
+    jqueryMap.$document.on( 'spa-logout', onLogout );
 
     jqueryMap.$acct
       .text( 'Please sign-in.' )
