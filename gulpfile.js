@@ -76,7 +76,7 @@ gulp.task( 'js', function () {
 
 // task "hologram"
 gulp.task( 'hologram', function() {
-  return gulp.src( ['hologram/config.yml' ] )
+  return gulp.src( [ 'hologram/config.yml' ] )
   .pipe( plumber() )
   .pipe( hologram() )
   .pipe( browserSync.stream() );
