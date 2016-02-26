@@ -5,8 +5,9 @@
  */
 
 /* eslint-env browser, jquery */
+/* global spa:true */
 
-var spa = ( function ( $ ) {
+spa = ( function ( $ ) {
   'use strict';
 
   var initModule;
@@ -19,7 +20,10 @@ var spa = ( function ( $ ) {
   initModule = function ( $container ) {
     spa.data.initModule();
     spa.model.initModule();
-    spa.shell.initModule( $container );
+
+    if ( spa.shell && $container ) {
+      spa.shell.initModule( $container );
+    }
   };
 
   return { initModule: initModule };

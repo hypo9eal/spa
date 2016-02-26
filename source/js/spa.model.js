@@ -8,7 +8,7 @@
 
 /* eslint-env jquery, browser */
 /* eslint no-console: 1 */
-/* global TAFFY: false */
+/* global $g:false, TAFFY: false */
 
 // 未修正6.3.4
 
@@ -43,7 +43,7 @@ spa.model = ( function () {
     },
 
     jqueryMap = {
-      $document: $( document )
+      $global: null
     },
 
     /**
@@ -52,7 +52,8 @@ spa.model = ( function () {
     isFakeData = false,
 
     personProto, makeCid, clearPeopleDb, completeLogin,
-    makePerson, removePerson, people, chat, initModule;
+    makePerson, removePerson, people, chat, initModule,
+    setDataMode, setGlobal;
 
   /**
    * personオブジェクトのプロトタイプ
@@ -115,7 +116,7 @@ spa.model = ( function () {
     stateMap.people_cid_map[ user_map._id ] = stateMap.user;
 
     chat.join();
-    jqueryMap.$document.trigger( 'spa-login', [ stateMap.user ] );
+    jqueryMap.$global.trigger( 'spa-login', [ stateMap.user ] );
   };
 
   /**
@@ -277,7 +278,7 @@ spa.model = ( function () {
 
       spa.data.removeSio();
 
-      jqueryMap.$document.trigger( 'spa-logout', [ user ] );
+      jqueryMap.$global.trigger( 'spa-logout', [ user ] );
 
       return is_removed;
     };
@@ -413,7 +414,7 @@ spa.model = ( function () {
         new_chatee = null;
       }
 
-      jqueryMap.$document.trigger( 'spa-setchatee', {
+      jqueryMap.$global.trigger( 'spa-setchatee', {
         old_chatee: chatee,
         new_chatee: new_chatee
       });
@@ -506,7 +507,7 @@ spa.model = ( function () {
      */
     _publish_listchange = function ( arg_list ) {
       _update_list( arg_list );
-      jqueryMap.$document.trigger( 'spa-listchange', [ arg_list ] );
+      jqueryMap.$global.trigger( 'spa-listchange', [ arg_list ] );
     };
 
     /**
@@ -528,7 +529,7 @@ spa.model = ( function () {
         set_chatee( msg_map.sender_id );
       }
 
-      jqueryMap.$document.trigger( 'spa-updatechat', [ msg_map ] );
+      jqueryMap.$global.trigger( 'spa-updatechat', [ msg_map ] );
     };
 
     /**
@@ -568,11 +569,24 @@ spa.model = ( function () {
     });
 
     stateMap.user = stateMap.anon_user;
+
+    setGlobal();
+  };
+
+  setDataMode = function ( arg_str ) {
+    isFakeData = ( arg_str === 'fake' ? true : false );
+  };
+
+  setGlobal = function () {
+    jqueryMap.$global =
+      ( typeof document == 'undefined' ? $g : $( document ) );
   };
 
   return {
     initModule: initModule,
     chat: chat,
-    people: people
+    people: people,
+    setDataMode: setDataMode,
+    setGlobal: setGlobal
   };
 }());

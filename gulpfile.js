@@ -12,23 +12,28 @@ var
   plumber = require( 'gulp-plumber' ),
   concat = require( 'gulp-concat' ),
   nodemon = require( 'gulp-nodemon' ),
+  gulpif = require( 'gulp-if' ),
+  minimist = require( 'minimist' ),
+  // shell = require( 'gulp-shell' ),
 
+  opts = minimist( process.argv.slice( 2 ) ),
+  task_name = opts._[ 0 ],
   src = 'source',
   dst = 'app/public';
 
 // task "css"
 gulp.task( 'css', function () {
-  return gulp.src([
+  return gulp.src( [
     src + '/css/spa.scss',
     src + '/css/spa.shell.scss',
     src + '/css/spa.chat.scss',
     src + '/css/spa.avtr.scss'
-  ])
+  ] )
   .pipe( plumber() )
   .pipe( sourcemaps.init() )
   .pipe( sass().on( 'error', sass.logError ) )
   .pipe( autoprefixer() )
-  .pipe( concat( 'css/spa.min.css') )
+  .pipe( concat( 'css/spa.min.css' ) )
   .pipe( cssnano() )
   .pipe( sourcemaps.write( 'maps' ) )
   .pipe( gulp.dest( dst ) )
@@ -37,29 +42,41 @@ gulp.task( 'css', function () {
 
 // task "js"
 gulp.task( 'js', function () {
-  return gulp.src([
-    src + '/js/spa.js',
-    src + '/js/spa.util.js',
-    src + '/js/spa.data.js',
-    src + '/js/spa.fake.js',
-    src + '/js/spa.model.js',
-    src + '/js/spa.util_b.js',
-    src + '/js/spa.shell.js',
-    src + '/js/spa.chat.js',
-    src + '/js/spa.avtr.js'
-  ])
-  .pipe( plumber() )
-  .pipe( sourcemaps.init() )
-  .pipe( concat( 'js/spa.min.js' ) )
-  .pipe( uglify() )
-  .pipe( sourcemaps.write( 'maps' ) )
-  .pipe( gulp.dest( dst ))
-  .pipe( browserSync.stream() );
+  var
+    is_test = ( task_name === 'test' ? true : false ),
+    src_list = [
+      src + '/js/spa.js',
+      src + '/js/spa.util.js',
+      src + '/js/spa.data.js',
+      src + '/js/spa.model.js',
+      src + '/js/spa.util_b.js',
+      src + '/js/spa.shell.js',
+      src + '/js/spa.chat.js',
+      src + '/js/spa.avtr.js' ];
+
+  if ( is_test ) {
+    src_list = [
+      src + '/js/spa.js',
+      src + '/js/spa.util.js',
+      src + '/js/spa.data.js',
+      src + '/js/spa.fake.js',
+      src + '/js/spa.model.js' ];
+    dst += '/js';
+  }
+
+  return gulp.src( src_list )
+    .pipe( plumber() )
+    .pipe( sourcemaps.init() )
+    .pipe( gulpif( ! is_test, concat( 'js/spa.min.js' ) ) )
+    .pipe( gulpif( ! is_test, uglify() ) )
+    .pipe( sourcemaps.write( 'maps' ) )
+    .pipe( gulp.dest( dst ) )
+    .pipe( browserSync.stream() );
 });
 
 // task "hologram"
 gulp.task( 'hologram', function() {
-  return gulp.src( ['hologram/config.yml'] )
+  return gulp.src( [ 'hologram/config.yml' ] )
   .pipe( plumber() )
   .pipe( hologram() )
   .pipe( browserSync.stream() );
@@ -80,23 +97,17 @@ gulp.task( 'copy', function () {
 
 // task "node"
 gulp.task( 'node', function () {
-  return nodemon( {
-    script: 'app/app.js',
-    ext: 'js json',
-    ignore: [ dst ],
-    env: {
-      'NODE_ENV': 'development'
-    },
-    stdout: true
-  });
-});
+  var exec_str = 'node';
 
-// task "node-inspector"
-gulp.task( 'node-inspector', function () {
+  if ( task_name === 'default' && opts.debug ) {
+    exec_str =
+      'node-inspector --web-port=4000 --debug-port=5858 & node --debug';
+  }
+
   return nodemon( {
     script: 'app/app.js',
     ext: 'js json',
-    exec: 'node-inspector --web-port=4000 --debug-port=5858 & node --debug',
+    exec: exec_str,
     ignore: [ dst ],
     env: {
       'NODE_ENV': 'development'
@@ -113,18 +124,18 @@ gulp.task( 'watch', function () {
     open: false
   } );
 
-  gulp.watch( ['hologram/**/*'], ['hologram'] );
-  gulp.watch( [src + '/**/*.scss'], ['css', 'hologram'] );
-  gulp.watch( [src + '/js/*.js'], ['js'] );
-  gulp.watch([
+  gulp.watch( [ 'hologram/**/*' ], [ 'hologram' ] );
+  gulp.watch( [ src + '/**/*.scss' ], [ 'css', 'hologram' ] );
+  gulp.watch( [ src + '/js/*.js' ], [ 'js' ] );
+  gulp.watch( [
     src + '/**/*',
     '!' + src + '/css/**/*.scss',
     '!' + src + '/js/*.js'
-  ], ['copy'] );
+  ], [ 'copy' ] );
 });
 
 gulp.task( 'default',
-  ['copy', 'css', 'js', 'hologram', 'node', 'watch'] );
+  [ 'copy', 'css', 'js', 'hologram', 'node', 'watch' ] );
 
-gulp.task( 'inspector',
-  ['copy', 'css', 'js', 'hologram', 'node-inspector', 'watch'] );
+gulp.task( 'test',
+  [ 'copy', 'js' ] );
