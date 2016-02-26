@@ -83,7 +83,7 @@ gulp.task( 'node', function () {
   return nodemon( {
     script: 'app/app.js',
     ext: 'js json',
-    ignore: [],
+    ignore: [ dst ],
     env: {
       'NODE_ENV': 'development'
     },
@@ -97,7 +97,7 @@ gulp.task( 'node-inspector', function () {
     script: 'app/app.js',
     ext: 'js json',
     exec: 'node-inspector --web-port=4000 --debug-port=5858 & node --debug',
-    ignore: [],
+    ignore: [ dst ],
     env: {
       'NODE_ENV': 'development'
     },
