@@ -67,7 +67,7 @@ spa.avtr = ( function () {
   setJqueryMap = function ( $container ) {
     jqueryMap = {
       $container: $container,
-      $document: $(document)
+      $global: $( document )
     };
   };
 
@@ -267,9 +267,9 @@ spa.avtr = ( function () {
   initModule = function ( $container ) {
     setJqueryMap( $container );
 
-    jqueryMap.$document.on( 'spa-setchatee', onSetchatee );
-    jqueryMap.$document.on( 'spa-listchange', onListchange );
-    jqueryMap.$document.on( 'spa-logout', onLogout );
+    jqueryMap.$global.on( 'spa-setchatee', onSetchatee );
+    jqueryMap.$global.on( 'spa-listchange', onListchange );
+    jqueryMap.$global.on( 'spa-logout', onLogout );
 
     $container
       .on( 'utap', onTapNav )

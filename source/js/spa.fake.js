@@ -64,7 +64,7 @@ spa.fake = ( function () {
    */
   mockSio = ( function () {
     var on_sio, emit_sio, emit_mock_msg,
-      send_listchange, listchange_idto,
+      send_listchange, send_connect, listchange_idto, connect_idto,
       callback_map = {};
 
     /**
@@ -186,6 +186,23 @@ spa.fake = ( function () {
       }, 1000);
     };
 
+    /**
+     * DBへ接続されたことを模倣する
+     * @return {[type]} [description]
+     */
+    send_connect = function () {
+      connect_idto = setTimeout( function () {
+        if( callback_map.connect ) {
+          callback_map.connect();
+          connect_idto = undefined;
+        }
+        else {
+          send_connect();
+        }
+      }, 1000 );
+    };
+
+    send_connect();
     send_listchange();
 
     return {

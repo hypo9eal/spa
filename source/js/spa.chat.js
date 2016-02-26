@@ -134,8 +134,8 @@ spa.chat = ( function () {
       $input: $slider.find( '.spa-chat-msg-in input[type=text]' ),
       $send: $slider.find( '.spa-chat-msg-send' ),
       $form: $slider.find( '.spa-chat-msg-form' ),
-      $document: $(document),
-      $window: $(window)
+      $global: $( document ),
+      $window: $( window )
     };
   };
 
@@ -550,19 +550,19 @@ spa.chat = ( function () {
     jqueryMap.$toggle.prop( 'title', configMap.slider_closed_title );
     stateMap.position_type = 'closed';
 
-    jqueryMap.$document.on(
+    jqueryMap.$global.on(
       'spa-listchange', onListchange );
 
-    jqueryMap.$document.on(
+    jqueryMap.$global.on(
       'spa-setchatee', onSetchatee );
 
-    jqueryMap.$document.on(
+    jqueryMap.$global.on(
       'spa-updatechat', onUpdatechat );
 
-    jqueryMap.$document.on(
+    jqueryMap.$global.on(
       'spa-login', onLogin );
 
-    jqueryMap.$document.on(
+    jqueryMap.$global.on(
       'spa-logout', onLogout );
 
     jqueryMap.$head.on( 'utap', onTapToggle );

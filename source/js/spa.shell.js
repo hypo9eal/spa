@@ -83,7 +83,7 @@ spa.shell = ( function () {
   setJqueryMap = function () {
     var $container = stateMap.$container;
     jqueryMap = {
-      $document: $(document),
+      $global: $( document ),
       $container: $container,
       $acct: $container.find( '.spa-shell-head-acct' ),
       $nav: $container.find( '.spa-shell-main-nav' )
@@ -306,8 +306,8 @@ spa.shell = ( function () {
       .trigger( 'hashchange' );
 
     // spa-login, spa-logoutのイベントハンドラ割り当て
-    jqueryMap.$document.on( 'spa-login', onLogin );
-    jqueryMap.$document.on( 'spa-logout', onLogout );
+    jqueryMap.$global.on( 'spa-login', onLogin );
+    jqueryMap.$global.on( 'spa-logout', onLogout );
 
     jqueryMap.$acct
       .text( 'Please sign-in.' )
