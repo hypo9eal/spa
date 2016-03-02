@@ -147,10 +147,8 @@ gulp.task( 'mongodb', function ()  {
     ] ));
 } );
 
-gulp.task( 'start', [ 'copy', 'js' ], shell.task ( [
-  'mocha ' + dst
-] ));
-
 gulp.task( 'build', [ 'node', 'watch' ] );
 
-gulp.task( 'test', [ 'start' ] );
+gulp.task( 'test', [ 'copy', 'js' ], shell.task ( [
+  'mocha ' + dst
+] ));
