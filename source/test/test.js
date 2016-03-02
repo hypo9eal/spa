@@ -11,16 +11,16 @@ var
   window = jsdom('<html></html>').defaultView;
 
 global.jQuery = require( 'jquery' )( window );
-global.TAFFY = require( './js/lib/taffy-min.js' ).taffy;
+global.TAFFY = require( '../js/lib/taffy-min.js' ).taffy;
 global.$ = jQuery;
 global.$g = $({});
 global.spa = null;
 
-require( './js/spa.js' );
-require( './js/spa.util.js' );
-require( './js/spa.data.js' );
-require( './js/spa.fake.js' );
-require( './js/spa.model.js' );
+require( '../js/spa.js' );
+require( '../js/spa.util.js' );
+require( '../js/spa.data.js' );
+require( '../js/spa.fake.js' );
+require( '../js/spa.model.js' );
 
 spa.initModule();
 spa.model.setDataMode( 'fake' );
