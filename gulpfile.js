@@ -18,18 +18,18 @@ var
 
   opts = minimist( process.argv.slice( 2 ) ),
   task_name = opts._[ 0 ],
-  src = 'source',
-  dst = 'app/public',
+  sourcePath = 'source',
+  publicPath = 'app/public',
   dbPath = '/usr/local/var/mongodb',
   dbLogPath = '/usr/local/var/log/mongodb/mongodb.log';
 
 // task "css"
 gulp.task( 'css', function () {
   return gulp.src( [
-    src + '/css/spa.scss',
-    src + '/css/spa.shell.scss',
-    src + '/css/spa.chat.scss',
-    src + '/css/spa.avtr.scss'
+    sourcePath + '/css/spa.scss',
+    sourcePath + '/css/spa.shell.scss',
+    sourcePath + '/css/spa.chat.scss',
+    sourcePath + '/css/spa.avtr.scss'
   ] )
   .pipe( plumber() )
   .pipe( sourcemaps.init() )
@@ -38,7 +38,7 @@ gulp.task( 'css', function () {
   .pipe( concat( 'css/spa.min.css' ) )
   .pipe( cssnano() )
   .pipe( sourcemaps.write( 'maps' ) )
-  .pipe( gulp.dest( dst ) )
+  .pipe( gulp.dest( publicPath ) )
   .pipe( browserSync.stream() );
 });
 
@@ -46,33 +46,33 @@ gulp.task( 'css', function () {
 gulp.task( 'js', function () {
   var
     is_test = ( task_name === 'test' ? true : false ),
-    src_list = [
-      src + '/js/spa.js',
-      src + '/js/spa.util.js',
-      src + '/js/spa.data.js',
-      src + '/js/spa.model.js',
-      src + '/js/spa.util_b.js',
-      src + '/js/spa.shell.js',
-      src + '/js/spa.chat.js',
-      src + '/js/spa.avtr.js' ];
+    sourcepath_list = [
+      sourcePath + '/js/spa.js',
+      sourcePath + '/js/spa.util.js',
+      sourcePath + '/js/spa.data.js',
+      sourcePath + '/js/spa.model.js',
+      sourcePath + '/js/spa.util_b.js',
+      sourcePath + '/js/spa.shell.js',
+      sourcePath + '/js/spa.chat.js',
+      sourcePath + '/js/spa.avtr.js' ];
 
   if ( is_test ) {
-    src_list = [
-      src + '/js/spa.js',
-      src + '/js/spa.util.js',
-      src + '/js/spa.data.js',
-      src + '/js/spa.fake.js',
-      src + '/js/spa.model.js' ];
-    dst += '/js';
+    sourcepath_list = [
+      sourcePath + '/js/spa.js',
+      sourcePath + '/js/spa.util.js',
+      sourcePath + '/js/spa.data.js',
+      sourcePath + '/js/spa.fake.js',
+      sourcePath + '/js/spa.model.js' ];
+    publicPath += '/js';
   }
 
-  return gulp.src( src_list )
+  return gulp.src( sourcepath_list )
     .pipe( plumber() )
     .pipe( sourcemaps.init() )
     .pipe( gulpif( ! is_test, concat( 'js/spa.min.js' ) ) )
     .pipe( gulpif( ! is_test, uglify() ) )
     .pipe( sourcemaps.write( 'maps' ) )
-    .pipe( gulp.dest( dst ) )
+    .pipe( gulp.dest( publicPath ) )
     .pipe( browserSync.stream() );
 });
 
@@ -87,13 +87,13 @@ gulp.task( 'hologram', function() {
 // task "copy"
 gulp.task( 'copy', function () {
   return gulp.src([
-    src + '/**/*',
-    '!' + src + '/css/**/*.scss',
-    '!' + src + '/css/**/*.css',
-    '!' + src + '/js/*.js'
+    sourcePath + '/**/*',
+    '!' + sourcePath + '/css/**/*.scss',
+    '!' + sourcePath + '/css/**/*.css',
+    '!' + sourcePath + '/js/*.js'
   ])
   .pipe( plumber() )
-  .pipe( gulp.dest( dst ) )
+  .pipe( gulp.dest( publicPath ) )
   .pipe( browserSync.stream() );
 });
 
@@ -109,12 +109,12 @@ gulp.task( 'watch', [ 'deploy' ], function () {
   } );
 
   gulp.watch( [ 'hologram/**/*' ], [ 'hologram' ] );
-  gulp.watch( [ src + '/**/*.scss' ], [ 'css', 'hologram' ] );
-  gulp.watch( [ src + '/js/*.js' ], [ 'js' ] );
+  gulp.watch( [ sourcePath + '/**/*.scss' ], [ 'css', 'hologram' ] );
+  gulp.watch( [ sourcePath + '/js/*.js' ], [ 'js' ] );
   gulp.watch( [
-    src + '/**/*',
-    '!' + src + '/css/**/*.scss',
-    '!' + src + '/js/*.js'
+    sourcePath + '/**/*',
+    '!' + sourcePath + '/css/**/*.scss',
+    '!' + sourcePath + '/js/*.js'
   ], [ 'copy' ] );
 });
 
@@ -131,7 +131,7 @@ gulp.task( 'node', function () {
     script: 'app/app.js',
     ext: 'js json',
     exec: exec_str,
-    ignore: [ dst ],
+    ignore: [ publicPath ],
     env: {
       'NODE_ENV': 'development'
     },
@@ -150,5 +150,5 @@ gulp.task( 'mongodb', function ()  {
 gulp.task( 'build', [ 'node', 'watch' ] );
 
 gulp.task( 'test', [ 'copy', 'js' ], shell.task ( [
-  'mocha ' + dst
+  'mocha ' + publicPath + '/test/test.js'
 ] ));
