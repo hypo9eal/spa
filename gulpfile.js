@@ -149,6 +149,6 @@ gulp.task( 'mongodb', function ()  {
 
 gulp.task( 'build', [ 'node', 'watch' ] );
 
-gulp.task( 'test', [ 'copy', 'js' ], shell.task ( [
-  'mocha ' + publicPath + '/test/test.js'
+gulp.task( 'test', [ 'copy', 'js', 'node' ], shell.task ( [
+  'mocha ' + publicPath + '/test/test.js -t 10000'
 ] ));
