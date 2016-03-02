@@ -38,11 +38,11 @@
     "node-inspector": "^0.12.7"
   },
   "scripts": {
-    "build": "gulp default",
-    "debug": "gulp default --debug",
-    "test": "gulp test",
+    "build": "gulp build",
+    "debug": "gulp build --debug",
     "hologram": "hologram -c hologram/config.yml",
-    "start": ""
+    "mongodb": "gulp mongodb",
+    "test": "gulp test"
   },
   "author": "",
   "license": "ISC",

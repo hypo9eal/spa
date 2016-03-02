@@ -14,12 +14,14 @@ var
   nodemon = require( 'gulp-nodemon' ),
   gulpif = require( 'gulp-if' ),
   minimist = require( 'minimist' ),
-  // shell = require( 'gulp-shell' ),
+  shell = require( 'gulp-shell' ),
 
   opts = minimist( process.argv.slice( 2 ) ),
   task_name = opts._[ 0 ],
   src = 'source',
-  dst = 'app/public';
+  dst = 'app/public',
+  dbPath = '/usr/local/var/mongodb',
+  dbLogPath = '/usr/local/var/log/mongodb/mongodb.log';
 
 // task "css"
 gulp.task( 'css', function () {
@@ -95,29 +97,11 @@ gulp.task( 'copy', function () {
   .pipe( browserSync.stream() );
 });
 
-// task "node"
-gulp.task( 'node', function () {
-  var exec_str = 'node';
-
-  if ( task_name === 'default' && opts.debug ) {
-    exec_str =
-      'node-inspector --web-port=4000 --debug-port=5858 & node --debug';
-  }
-
-  return nodemon( {
-    script: 'app/app.js',
-    ext: 'js json',
-    exec: exec_str,
-    ignore: [ dst ],
-    env: {
-      'NODE_ENV': 'development'
-    },
-    stdout: true
-  });
-});
+// task "deploy"
+gulp.task( 'deploy', [ 'copy', 'css', 'js', 'hologram' ] );
 
 // task "watch"
-gulp.task( 'watch', function () {
+gulp.task( 'watch', [ 'deploy' ], function () {
   browserSync.init( {
     proxy: 'http://localhost:4000',
     port: 3000,
@@ -134,8 +118,39 @@ gulp.task( 'watch', function () {
   ], [ 'copy' ] );
 });
 
-gulp.task( 'default',
-  [ 'copy', 'css', 'js', 'hologram', 'node', 'watch' ] );
+// task "node"
+gulp.task( 'node', function () {
+  var exec_str = 'node';
 
-gulp.task( 'test',
-  [ 'copy', 'js' ] );
+  if ( opts.debug ) {
+    exec_str =
+      'node-inspector --web-port=4000 --debug-port=5858 & node --debug';
+  }
+
+  return nodemon( {
+    script: 'app/app.js',
+    ext: 'js json',
+    exec: exec_str,
+    ignore: [ dst ],
+    env: {
+      'NODE_ENV': 'development'
+    },
+    stdout: true
+  });
+});
+
+// task "mongodb"
+gulp.task( 'mongodb', function ()  {
+  return gulp.src( '' )
+    .pipe( shell( [
+      'mongod --fork --dbpath ' + dbPath + ' --logpath ' + dbLogPath
+    ] ));
+} );
+
+gulp.task( 'start', [ 'copy', 'js' ], shell.task ( [
+  'node ' + dst + '/test.js'
+] ));
+
+gulp.task( 'build', [ 'node', 'watch' ] );
+
+gulp.task( 'test', [ 'start' ] );
