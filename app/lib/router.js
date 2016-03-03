@@ -17,8 +17,9 @@ var
 
 router.route( '*' )
   .get( function ( req, res, next ) {
-    if( req.headers[ 'user-agent' ]
-      .indexOf( 'Googlebot/2.1; +http://www.google.com/bot.html' ) >= 0 ) {
+    if( req.headers[ 'user-agent' ] &&
+      req.headers[ 'user-agent' ].indexOf(
+        'Googlebot/2.1; +http://www.google.com/bot.html' ) >= 0 ) {
       res.send( 'This page for Googlebot' );
     }
     else {

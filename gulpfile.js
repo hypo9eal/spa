@@ -143,9 +143,18 @@ gulp.task( 'node', function () {
 gulp.task( 'mongodb', function ()  {
   return gulp.src( '' )
     .pipe( shell( [
-      'mongod --fork --dbpath ' + dbPath + ' --logpath ' + dbLogPath
+      'mongod --fork --dbpath ' + dbPath +
+      ' --logpath ' + dbLogPath + ' --logappend'
     ] ));
 } );
+
+// task "redis"
+gulp.task( 'redis', function () {
+  return gulp.src( '' )
+    .pipe( shell( [
+      'redis-server /usr/local/etc/redis.conf \&'
+    ]));
+});
 
 gulp.task( 'build', [ 'node', 'watch' ] );
 
