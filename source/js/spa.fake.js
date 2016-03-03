@@ -22,7 +22,7 @@ spa.fake = ( function () {
 
   peopleList = [
     {
-      name: 'Betty',
+      name: 'Kotori',
       _id: 'id_01',
       css_map: {
         top: 20,
@@ -31,7 +31,7 @@ spa.fake = ( function () {
       }
     },
     {
-      name: 'Mike',
+      name: 'Umi',
       _id: 'id_02',
       css_map: {
         top: 60,
@@ -40,7 +40,7 @@ spa.fake = ( function () {
       }
     },
     {
-      name: 'Pebbles',
+      name: 'Maki',
       _id: 'id_03',
       css_map: {
         top: 100,
@@ -49,7 +49,7 @@ spa.fake = ( function () {
       }
     },
     {
-      name: 'Wilma',
+      name: 'Rin',
       _id: 'id_04',
       css_map: {
         top: 140,
