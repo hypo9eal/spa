@@ -12,6 +12,7 @@
     "mongoose": "^4.4.4",
     "morgan": "^1.6.1",
     "normalize.css": "^3.0.3",
+    "redis": "^2.4.2",
     "socket.io": "^1.4.5"
   },
   "devDependencies": {
@@ -42,6 +43,7 @@
     "debug": "gulp build --debug",
     "hologram": "hologram -c hologram/config.yml",
     "mongodb": "gulp mongodb",
+    "redis": "gulp redis",
     "test": "gulp test"
   },
   "author": "",
