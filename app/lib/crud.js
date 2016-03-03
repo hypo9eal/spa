@@ -12,6 +12,8 @@ var
   mongoose = require( 'mongoose' ),
   fs = require( 'fs' ),
 
+  cache = require( './cache' ),
+
   Schema,
   modelMap = {
     'user': {}
@@ -70,9 +72,21 @@ readObj = function ( obj_type, find_map, callback ) {
   }
 
   model = modelMap[ obj_type ];
-  model.find( find_map, function ( err, obj ) {
-    callback( err, obj );
-  } );
+
+  cache.getValue(
+    find_map,
+    function () {
+      model.find( find_map, function ( err, obj ) {
+        // cache.setValue( find_map, obj );
+        callback( err, obj );
+      } );
+    },
+    function () {
+      model.find( find_map, function ( err, obj ) {
+        cache.setValue( find_map, obj );
+        callback( err, obj );
+      } );
+    });
 };
 
 constructObj = function ( obj_type, obj_map, callback ) {
@@ -136,6 +150,8 @@ destroyObj = function ( obj_type, find_map, callback ) {
     callback( type_check );
     return;
   }
+
+  cache.deleteKey( find_map );
 
   model = modelMap[ obj_type ];
   model.remove( {

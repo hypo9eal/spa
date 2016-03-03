@@ -15,8 +15,19 @@ var
 
   publicRoot = path.join( __dirname, '../', 'public' );
 
+router.route( '*' )
+  .get( function ( req, res, next ) {
+    if( req.headers[ 'user-agent' ] &&
+      req.headers[ 'user-agent' ].indexOf(
+        'Googlebot/2.1; +http://www.google.com/bot.html' ) >= 0 ) {
+      res.send( 'This page for Googlebot' );
+    }
+    else {
+      next();
+    }
+  });
 router.route( '/' )
-  .get(function ( req, res ) {
+  .get( function ( req, res ) {
     res.sendFile( path.join( publicRoot, 'spa.html' ) );
   });
 
