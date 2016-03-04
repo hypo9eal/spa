@@ -46,7 +46,7 @@ gulp.task( 'css', function () {
 gulp.task( 'js', function () {
   var
     is_test = ( task_name === 'test' ? true : false ),
-    sourcepath_list = [
+    file_list = [
       sourcePath + '/js/spa.js',
       sourcePath + '/js/spa.util.js',
       sourcePath + '/js/spa.data.js',
@@ -57,7 +57,7 @@ gulp.task( 'js', function () {
       sourcePath + '/js/spa.avtr.js' ];
 
   if ( is_test ) {
-    sourcepath_list = [
+    file_list = [
       sourcePath + '/js/spa.js',
       sourcePath + '/js/spa.util.js',
       sourcePath + '/js/spa.data.js',
@@ -66,7 +66,7 @@ gulp.task( 'js', function () {
     publicPath += '/js';
   }
 
-  return gulp.src( sourcepath_list )
+  return gulp.src( file_list )
     .pipe( plumber() )
     .pipe( sourcemaps.init() )
     .pipe( gulpif( ! is_test, concat( 'js/spa.min.js' ) ) )
@@ -86,12 +86,22 @@ gulp.task( 'hologram', function() {
 
 // task "copy"
 gulp.task( 'copy', function () {
-  return gulp.src([
-    sourcePath + '/**/*',
-    '!' + sourcePath + '/css/**/*.scss',
-    '!' + sourcePath + '/css/**/*.css',
-    '!' + sourcePath + '/js/*.js'
-  ])
+  var
+    is_test = ( task_name === 'test' ? true : false ),
+    file_list = [
+      sourcePath + '/**/*',
+      '!' + sourcePath + '/css/**/*.scss',
+      '!' + sourcePath + '/css/**/*.css',
+      '!' + sourcePath + '/js/*.js'
+    ];
+
+  if ( ! is_test ) {
+    file_list.push(
+      '!' + sourcePath + '/test/*.js'
+    );
+  }
+
+  return gulp.src( file_list )
   .pipe( plumber() )
   .pipe( gulp.dest( publicPath ) )
   .pipe( browserSync.stream() );
